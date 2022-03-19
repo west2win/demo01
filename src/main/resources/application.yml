@@ -42,3 +42,12 @@ mybatis-plus:
 
 logging:
   config: classpath:logback-spring.xml
+
+aliyun:
+  accessKeyId: LTAI5t8NCpW65uqoVTmVqR5m
+  accessKeySecret: 630WOt1yn9FTRSjmdbHx8uTL38BLzr
+  oss:
+    endpoint: https://oss-cn-heyuan.aliyuncs.com
+    bucketName: market-information
+    urlPrefix: https://market-information.oss-cn-heyuan.aliyuncs.com/
+
