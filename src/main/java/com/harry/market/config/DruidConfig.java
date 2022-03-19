@@ -32,7 +32,7 @@ public class DruidConfig {
         // 这些参数可以在 com.alibaba.druid.support.http.StatViewServlet 的父类 com.alibaba.druid.support.http.ResourceServlet 中找到
         Map<String,String> initParams = new HashMap<>();
 
-        initParams.put("loginUsername","admin");
+        initParams.put("loginUsername","root");
         initParams.put("loginPassword","123456");
         initParams.put("allow",""); //默认就是允许所有访问
 
