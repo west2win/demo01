@@ -55,7 +55,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- mybatis-plus -->
+        <!-- mybatis-pl us -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -99,6 +99,15 @@
             <artifactId>spring-boot-starter-logging</artifactId>
             <version>2.5.10</version>
         </dependency>
+
+        <!-- springboot热部署 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>true</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
