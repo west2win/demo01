@@ -100,19 +100,28 @@
             <version>2.5.10</version>
         </dependency>
 
+<<<<<<< HEAD
         <!--springboot热部署-->
+=======
+        <!-- springboot热部署 -->
+>>>>>>> a83b967 (商品上传)
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
             <scope>true</scope>
         </dependency>
+<<<<<<< HEAD
         <!--druid数据源-->
+=======
+
+>>>>>>> a83b967 (商品上传)
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.2.8</version>
         </dependency>
+<<<<<<< HEAD
         <!--阿里云oss对象存储-->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
@@ -123,6 +132,8 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
+=======
+>>>>>>> a83b967 (商品上传)
 
     </dependencies>
 
