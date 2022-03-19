@@ -17,9 +17,6 @@ public class UploadPicService {
     @Autowired
     private OSSClient ossClient;
 
-    @Autowired
-    private AliOssConfig aliyunConfig;
-
     /**
      *
      * @param multipartFile

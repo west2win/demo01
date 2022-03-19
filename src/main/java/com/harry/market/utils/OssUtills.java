@@ -9,7 +9,9 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import com.harry.market.common.OSSClientConstants;
+import com.harry.market.config.AliOssConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
