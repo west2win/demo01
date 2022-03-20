@@ -13,7 +13,7 @@ import java.util.Date;
 public class Item {
 
     @TableId(value = "id",type = IdType.AUTO)
-    private Integer id;
+    private BigInteger id;
     private String name;
     private String introduction;
     private String photo;

@@ -31,7 +31,7 @@ public class Result {
         return new Result(code,msg,null);
     }
 
-    public static Result error(){
+    public static Result error(String code401, ResultCode userNotLogin){
         return new Result(Constants.CODE_500,"系统错误",null);
     }
 }

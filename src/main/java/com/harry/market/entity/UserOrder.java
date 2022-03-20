@@ -14,13 +14,13 @@ import java.util.Date;
 public class UserOrder {
 
     @TableId(value = "id",type = IdType.AUTO)
-    private Integer id;
+    private BigInteger id;
     private BigInteger user_id;
     private BigInteger order_id;
     @TableLogic
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)
     private Date gmt_create;
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmt_modified;
 }

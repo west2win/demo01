@@ -21,5 +21,8 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Update("Update user Set perm ='管理员' Where id = #{id}")
     Boolean setAdmin(Integer id);
+
+//    @Select("select `perm` from user where username = #{username}")
+//    String getUserPerm(String username);
 }
 

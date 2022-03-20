@@ -13,7 +13,7 @@ import java.util.Date;
 public class Order {
 
     @TableId(value = "id",type = IdType.AUTO)
-    private Integer id;
+    private BigInteger id;
     private String item;
     private Integer number;
     private BigDecimal per_price;
@@ -22,6 +22,6 @@ public class Order {
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)
     private Date gmt_create;
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmt_modified;
 }

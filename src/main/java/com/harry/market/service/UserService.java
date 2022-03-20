@@ -10,7 +10,11 @@ import com.harry.market.entity.User;
 import com.harry.market.exception.ServiceException;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.utils.Md5Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @program: market
@@ -20,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService extends ServiceImpl<UserMapper,User> {
+
+    @Autowired
+    UserMapper userMapper;
 
     private static final Log LOG = Log.get();
 
@@ -48,4 +55,18 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         }
         return one;
     }
+
+    public String getUserPerm(String username) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",username);
+        String perm = userMapper.selectOne(wrapper).getPerm();
+        return perm;
+    }
+
+    public User getUser(String username) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",username);
+        return userMapper.selectOne(wrapper);
+    }
+
 }

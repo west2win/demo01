@@ -9,6 +9,8 @@ import com.harry.market.mapper.UserMapper;
 import com.harry.market.service.UserService;
 import com.harry.market.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 //<<<<<<< HEAD
@@ -55,7 +57,13 @@ public class UserController {
     @PostMapping("/register")
     public Result register(@RequestBody UserDTO userDTO) {
         String username = userDTO.getUsername();
-        String password = Md5Utils.code(userDTO.getPassword());
+//        String password = Md5Utils.code(userDTO.getPassword());
+
+        // 改成强hash加密
+        String password = userDTO.getPassword();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        password = passwordEncoder.encode(password);
+
         userDTO.setPassword(password);
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
             return Result.error(Constants.CODE_400, "参数错误");
