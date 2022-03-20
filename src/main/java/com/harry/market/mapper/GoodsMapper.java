@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Mapper
 public interface GoodsMapper extends BaseMapper<Item> {
+
     @Select("select * from item where is_audit = 0")
     List<Item> audit();
 
@@ -26,4 +27,10 @@ public interface GoodsMapper extends BaseMapper<Item> {
 
     @Select("Update item Set number = number - #{dealNumber} Where id = #{goodsId}")
     List<Item> deal(BigInteger goodsId,Integer dealNumber);
+
+    @Select ("select * from item where name like \"%\"#{nname}\"%\"")
+    List<Item> findGoodsName(String nname);
+
+    @Select ("Update item Set is_audit = 1 Where id = #{id}")
+    List<Item> passAudit(BigInteger id);
 }

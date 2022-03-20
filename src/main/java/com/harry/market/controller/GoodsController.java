@@ -103,7 +103,7 @@ public class GoodsController {
     }
 
 
-    //商品审核功能
+    //查看全部待审核商品
     @GetMapping("/findAudit")
     public Result findAudit() {
         if (goodsMapper.audit() != null) {
@@ -113,6 +113,12 @@ public class GoodsController {
         }
     }
 
+    //审核通过商品
+    @GetMapping("/audit/{id}")
+    public Result passAudit(@PathVariable BigInteger id) {
+        return Result.success(goodsMapper.passAudit(id));
+        }
+
     //分页查询接口
     @GetMapping("/page")
     public Result page(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
@@ -121,7 +127,7 @@ public class GoodsController {
     }
 
     //商品详情查询
-    @GetMapping("/{id}")
+    @GetMapping("/detail/{id}")
     public Result detail(@PathVariable BigInteger id) {
         return Result.success(goodsMapper.findGoods(id));
     }
