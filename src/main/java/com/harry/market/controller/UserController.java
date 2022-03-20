@@ -24,8 +24,6 @@ import java.util.Date;
 import javax.annotation.Resource;
 
 
-//=======
-//>>>>>>> a83b967 (商品上传)
 
 @ResponseBody
 @RestController
@@ -45,12 +43,13 @@ public class UserController {
         String password = userDTO.getPassword();
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
             return Result.error(Constants.CODE_400, "参数错误");
-        }else if(userMapper.findAdmin(userDTO.getId())!=null){
+        }else if(userMapper.sameName(username).get(0).getPerm().equals("管理员")){
             return Result.adminSuccess();
         }else{
             userService.login(userDTO);
             return Result.success(userDTO.getId());
         }
+
     }
 
     @PostMapping("/register")
