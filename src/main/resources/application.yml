@@ -39,6 +39,10 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: false
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 
 logging:
   config: classpath:logback-spring.xml

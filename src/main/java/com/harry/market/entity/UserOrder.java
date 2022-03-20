@@ -1,8 +1,6 @@
 package com.harry.market.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -17,7 +15,10 @@ public class UserOrder {
     private BigInteger id;
     private BigInteger user_id;
     private BigInteger order_id;
-    private boolean is_deleted;
+    @TableLogic
+    private Integer is_deleted;
+    @TableField(fill = FieldFill.INSERT)
     private Timestamp gmt_create;
+    @TableField(fill = FieldFill.UPDATE)
     private Timestamp gmt_modified;
 }
