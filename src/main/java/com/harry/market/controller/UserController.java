@@ -86,8 +86,6 @@ public class UserController {
         return Result.success(userMapper.setAdmin(id));
     }
 
-
-
     //查询所有数据
     @GetMapping()
     public Result findAll() {return Result.success(userService.list());}

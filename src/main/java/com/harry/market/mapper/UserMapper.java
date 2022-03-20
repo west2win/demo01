@@ -19,8 +19,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select * from user where username = #{username}")
     List<User> sameName(String username);
 
-
     @Update("Update user Set perm ='管理员' Where id = #{id}")
-    List<User> setAdmin(Integer id);
+    Boolean setAdmin(Integer id);
 }
 
