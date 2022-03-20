@@ -135,4 +135,16 @@ public class GoodsController {
             return Result.success(goodsMapper.deal(goodsId,dealNumber));
         }
     }
+
+    //模糊查询商品名称
+    @GetMapping("/find")
+    public Result find(@RequestParam String nname) {
+        if (goodsMapper.findGoodsName(nname).size() != 0) {
+            return Result.success(goodsMapper.findGoodsName(nname));
+        } else {
+            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+        }
+    }
+
+
 }
