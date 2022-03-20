@@ -3,6 +3,7 @@ package com.harry.market.controller;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.entity.Item;
 import com.harry.market.mapper.GoodsMapper;
@@ -102,4 +103,36 @@ public class GoodsController {
     }
 
 
+    //商品审核功能
+    @GetMapping("/findAudit")
+    public Result findAudit() {
+        if (goodsMapper.audit() != null) {
+            return Result.success(goodsMapper.audit());
+        }else{
+            return Result.error(Constants.CODE_400, "没有未审核的商品");
+        }
+    }
+
+    //分页查询接口
+    @GetMapping("/page")
+    public Result page(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        pageNum = (pageNum - 1) * pageSize;
+        return Result.success(goodsMapper.selectPage(pageNum, pageSize));
+    }
+
+    //商品详情查询
+    @GetMapping("/{id}")
+    public Result detail(@PathVariable BigInteger id) {
+        return Result.success(goodsMapper.findGoods(id));
+    }
+
+    //交易成功
+    @PostMapping("/deal")
+    public Result deal(@RequestParam BigInteger goodsId,@RequestParam Integer dealNumber){
+        if(goodsMapper.findGoods(goodsId).get((goodsId).intValue()).getNumber()<dealNumber){ //判断库存数量是否够卖
+            return Result.error(Constants.CODE_400, "库存商品不足");
+        }else{
+            return Result.success(goodsMapper.deal(goodsId,dealNumber));
+        }
+    }
 }
