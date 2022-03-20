@@ -126,13 +126,13 @@ public class GoodsController {
         return Result.success(goodsMapper.findGoods(id));
     }
 
-    //交易成功
-    @PostMapping("/deal")
-    public Result deal(@RequestParam BigInteger goodsId,@RequestParam Integer dealNumber){
-        if(goodsMapper.findGoods(goodsId).get((goodsId).intValue()).getNumber()<dealNumber){ //判断库存数量是否够卖
-            return Result.error(Constants.CODE_400, "库存商品不足");
-        }else{
-            return Result.success(goodsMapper.deal(goodsId,dealNumber));
-        }
-    }
+//    //交易成功
+//    @PostMapping("/deal")
+//    public Result deal(@RequestParam BigInteger goodsId,@RequestParam Integer dealNumber){
+//        if(goodsMapper.findGoods(goodsId).get((goodsId).intValue()).getNumber()<dealNumber){ //判断库存数量是否够卖
+//            return Result.error(Constants.CODE_400, "库存商品不足");
+//        }else{
+//            return Result.success(goodsMapper.deal(goodsId,dealNumber));
+//        }
+//    }
 }
