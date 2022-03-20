@@ -47,7 +47,7 @@ mybatis-plus:
 logging:
   config: classpath:logback-spring.xml
 
-<<<<<<< HEAD
+#<<<<<<< HEAD
 aliyun:
   accessKeyId: LTAI5t8NCpW65uqoVTmVqR5m
   accessKeySecret: 630WOt1yn9FTRSjmdbHx8uTL38BLzr
@@ -56,8 +56,8 @@ aliyun:
     bucketName: market-information
     urlPrefix: https://market-information.oss-cn-heyuan.aliyuncs.com/
 
-=======
+#=======
 files:
   upload:
     path: D:/IdeaProjects/data/
->>>>>>> a83b967 (商品上传)
+#>>>>>>> a83b967 (商品上传)

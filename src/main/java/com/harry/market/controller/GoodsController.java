@@ -6,6 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import com.harry.market.common.Result;
 import com.harry.market.entity.Item;
 import com.harry.market.mapper.GoodsMapper;
+import com.harry.market.service.UploadPicService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +39,10 @@ public class GoodsController {
     @Value("${files.upload.path}")
     private String fileUploadPath;
 
+    @Autowired
+    UploadPicService uploadPicService;
+    String folder = "item_photo/";
+
     @PostMapping("/upload")
     public Result upload(@RequestParam String name, @RequestParam BigDecimal price, @RequestParam Integer number, @RequestParam BigInteger seller_id, @RequestParam MultipartFile intro, @RequestParam MultipartFile photo) throws IOException {
 
@@ -67,9 +73,11 @@ public class GoodsController {
         intro.transferTo(uploadIntro);
         String introUrl = "http://484470xs49.qicp.vip/intro/" + introUUID;
 
-        photo.transferTo(uploadPhoto);
-        String photoURL = "http://484470xs49.qicp.vip/photo/" + photoUUID;
+//        photo.transferTo(uploadPhoto);
+//        String photoURL = "http://484470xs49.qicp.vip/photo/" + photoUUID;
 
+        // 改成上传AliOss对象存储了
+        String photoURL = uploadPicService.uploadPic(photo,photoUUID,folder);
 
         Item saveGoods = new Item();
         Date date = new Date();

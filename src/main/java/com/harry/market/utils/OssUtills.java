@@ -2,22 +2,22 @@ package com.harry.market.utils;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
-import com.aliyun.oss.model.PutObjectResult;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-import com.harry.market.common.OSSClientConstants;
-import com.harry.market.config.AliOssConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author jack
  */
 @Slf4j
+@Component
 public class OssUtills {
 
     //阿里云API的内或外网域名
@@ -28,16 +28,27 @@ public class OssUtills {
     private static String ACCESS_KEY_SECRET;
     //阿里云API的bucket名称
     private static String BACKET_NAME;
+    //阿里云API的前缀url
+//    @Value("${aliyun.oss.urlPrefix}")
+//    private String urlPrefix;
     //阿里云API的文件夹名称
 //    private static String FOLDER;
 
-    //初始化属性
-    static {
-        ENDPOINT = OSSClientConstants.ENDPOINT;
-        ACCESS_KEY_ID = OSSClientConstants.ACCESS_KEY_ID;
-        ACCESS_KEY_SECRET = OSSClientConstants.ACCESS_KEY_SECRET;
-        BACKET_NAME = OSSClientConstants.BACKET_NAME;
-//        FOLDER = OSSClientConstants.FOLDER;
+    @Value("${aliyun.oss.endpoint}")
+    public void setENDPOINT(String ENDPOINT) {
+        OssUtills.ENDPOINT = ENDPOINT;
+    }
+    @Value("${aliyun.accessKeyId}")
+    public void setAccessKeyId(String accessKeyId) {
+        ACCESS_KEY_ID = accessKeyId;
+    }
+    @Value("${aliyun.accessKeySecret}")
+    public void setAccessKeySecret(String accessKeySecret) {
+        ACCESS_KEY_SECRET = accessKeySecret;
+    }
+    @Value("${aliyun.oss.bucketName}")
+    public void setBacketName(String backetName) {
+        BACKET_NAME = backetName;
     }
 
     public static OSSClient getOSSClient() {

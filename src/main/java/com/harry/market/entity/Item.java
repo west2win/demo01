@@ -6,13 +6,14 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @TableName(value="item")
 public class Item {
 
     @TableId(value = "id",type = IdType.AUTO)
-    private BigInteger id;
+    private Integer id;
     private String name;
     private String introduction;
     private String photo;
@@ -23,7 +24,7 @@ public class Item {
     @TableLogic
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)
-    private Timestamp gmt_create;
-    @TableField(fill = FieldFill.UPDATE)
-    private Timestamp gmt_modified;
+    private Date gmt_create;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date gmt_modified;
 }

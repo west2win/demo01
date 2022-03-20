@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 @Service
@@ -25,8 +26,8 @@ public class UploadPicService {
      * @return 图片url
      * @throws FileNotFoundException
      */
-    public String uploadPic(MultipartFile multipartFile,String fileName, String folder) throws FileNotFoundException {
-        InputStream  inputstream  = new  FileInputStream(fileName);
+    public String uploadPic(MultipartFile multipartFile,String fileName, String folder) throws IOException {
+//        InputStream in = multipartFile.getInputStream();
         return OssUtills.saveImg(multipartFile,ossClient,folder);
     }
 }

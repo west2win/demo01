@@ -11,21 +11,21 @@ import com.harry.market.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
 import javax.annotation.Resource;
->>>>>>> a83b967 (商品上传)
-import java.sql.Timestamp;
+//>>>>>>> a83b967 (商品上传)
+//import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import javax.annotation.Resource;
 
 
-=======
->>>>>>> a83b967 (商品上传)
+//=======
+//>>>>>>> a83b967 (商品上传)
 
 @ResponseBody
 @RestController
@@ -71,9 +71,12 @@ public class UserController {
             saveUser.setUsername(username);
             saveUser.setPassword(password);
             saveUser.setPerm("用户");
-            saveUser.setIs_deleted(0);
-            saveUser.setGmt_create(Timestamp.valueOf(simpleDate.format(date)));
-            saveUser.setGmt_modified(Timestamp.valueOf(simpleDate.format(date)));
+
+            // Mybatis-plus 自动填充
+//            saveUser.setIs_deleted(0);
+//            saveUser.setGmt_create(Timestamp.valueOf(simpleDate.format(date)));
+//            saveUser.setGmt_modified(Timestamp.valueOf(simpleDate.format(date)));
+
             userMapper.insert(saveUser);
             return Result.success();
         }

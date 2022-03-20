@@ -6,6 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @TableName(value="order")
@@ -20,7 +21,7 @@ public class Order {
     @TableLogic
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)
-    private Timestamp gmt_create;
+    private Date gmt_create;
     @TableField(fill = FieldFill.UPDATE)
-    private Timestamp gmt_modified;
+    private Date gmt_modified;
 }
