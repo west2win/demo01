@@ -21,7 +21,7 @@ public class Item {
     private BigInteger seller_id;
     private boolean is_audit;
     @TableLogic
-    private Integer is_deleted;
+    private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)
     private Timestamp gmt_create;
     @TableField(fill = FieldFill.UPDATE)

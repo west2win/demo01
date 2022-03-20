@@ -15,7 +15,7 @@ public class User {
     private String password;
     private String perm;
     @TableLogic
-    private Integer is_deleted;
+    private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)
     private Timestamp gmt_create;
     @TableField(fill = FieldFill.UPDATE)

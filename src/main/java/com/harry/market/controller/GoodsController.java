@@ -83,9 +83,12 @@ public class GoodsController {
         saveGoods.setNumber(number);
         saveGoods.setSeller_id(seller_id);
         saveGoods.set_audit(false);
-        saveGoods.set_deleted(false);
-        saveGoods.setGmt_create(Timestamp.valueOf(simpleDate.format(date)));
-        saveGoods.setGmt_modified(Timestamp.valueOf(simpleDate.format(date)));
+
+        // mybatis-plus自动填充
+//        saveGoods.set_deleted(false);
+//        saveGoods.setGmt_create(Timestamp.valueOf(simpleDate.format(date)));
+//        saveGoods.setGmt_modified(Timestamp.valueOf(simpleDate.format(date)));
+
         goodsMapper.insert(saveGoods);
         return Result.success();
     }
