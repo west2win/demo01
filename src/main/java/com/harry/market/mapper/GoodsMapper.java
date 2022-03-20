@@ -25,8 +25,6 @@ public interface GoodsMapper extends BaseMapper<Item> {
     @Select("select  * from item where id = #{id}")
     List<Item> findGoods(BigInteger id);
 
-    @Select("Update item Set number = number - #{dealNumber} Where id = #{goodsId}")
-    List<Item> deal(BigInteger goodsId,Integer dealNumber);
 
     @Select ("select * from item where name like \"%\"#{nname}\"%\"")
     List<Item> findGoodsName(String nname);
