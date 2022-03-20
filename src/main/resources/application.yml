@@ -1,0 +1,63 @@
+server:
+  port: 9091
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/market?serverTimezone=GMT%2b8
+#    username: root
+#    password: gaoyiren011218
+    url: jdbc:mysql://47.113.218.23:3306/market?serverTimezone=GMT%2b8
+    username: root
+    password: 123456
+    # druid数据源配置
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  http:
+    multipart:
+      location: /data/upload_tmp
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+logging:
+  config: classpath:logback-spring.xml
+
+#<<<<<<< HEAD
+aliyun:
+  accessKeyId: LTAI5t8NCpW65uqoVTmVqR5m
+  accessKeySecret: 630WOt1yn9FTRSjmdbHx8uTL38BLzr
+  oss:
+    endpoint: https://oss-cn-heyuan.aliyuncs.com
+    bucketName: market-information
+    urlPrefix: https://market-information.oss-cn-heyuan.aliyuncs.com/
+
+#=======
+files:
+  upload:
+    path: D:/IdeaProjects/data/
+#>>>>>>> a83b967 (商品上传)
