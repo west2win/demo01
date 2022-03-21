@@ -15,6 +15,7 @@ public class Order {
     @TableId(value = "id",type = IdType.AUTO)
     private BigInteger id;
     private String item;
+    private BigInteger seller_id;
     private Integer number;
     private BigDecimal per_price;
     private boolean status;

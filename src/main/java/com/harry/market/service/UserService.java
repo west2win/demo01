@@ -27,7 +27,7 @@ import java.util.List;
 public class UserService extends ServiceImpl<UserMapper,User> {
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     private static final Log LOG = Log.get();
 

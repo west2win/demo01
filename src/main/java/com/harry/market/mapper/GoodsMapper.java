@@ -32,6 +32,4 @@ public interface GoodsMapper extends BaseMapper<Item> {
     @Select ("Update item Set is_audit = 1 Where id = #{id}")
     List<Item> passAudit(BigInteger id);
 
-    @Select("select `price` from item where `name` = ${goodName} and `seller_id` = ${seller_id} and `is_audit` = 0;")
-    List<BigDecimal> getPrice(String goodName,String seller_id);
 }

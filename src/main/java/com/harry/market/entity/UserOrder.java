@@ -16,7 +16,7 @@ public class UserOrder {
     @TableId(value = "id",type = IdType.AUTO)
     private BigInteger id;
     private BigInteger user_id;
-    private BigInteger order_id;
+    private BigInteger item_id;
     @TableLogic
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)
