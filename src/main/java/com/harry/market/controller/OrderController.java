@@ -16,20 +16,18 @@ import org.mockito.internal.matchers.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
-/**
- * @program: demo02
- * @author: HarryGao
- * @create: 2022-03-20 18:30
- */
+
+@ResponseBody
+@RestController
+@RequestMapping("/order")
+@CrossOrigin(origins ="*")
 public class OrderController {
 
     @Resource
