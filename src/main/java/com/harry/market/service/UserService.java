@@ -13,6 +13,7 @@ import com.harry.market.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
@@ -67,6 +68,12 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
         return userMapper.selectOne(wrapper);
+    }
+
+    public BigInteger getUserId(String username) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",username);
+        return userMapper.selectOne(wrapper).getId();
     }
 
 }

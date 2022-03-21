@@ -7,7 +7,11 @@ import com.harry.market.controller.dto.OrderDTO;
 import com.harry.market.entity.Order;
 import com.harry.market.mapper.GoodsMapper;
 import com.harry.market.mapper.OrderMapper;
+import com.harry.market.service.UserService;
 import org.mockito.internal.matchers.Or;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +31,9 @@ public class OrderController {
 
     @Resource
     private GoodsMapper goodsMapper;
+
+    @Autowired
+    private UserService userService;
 
     //交易成功
     @PostMapping("/deal")
@@ -52,7 +59,18 @@ public class OrderController {
             order.setItem(goodName);
             order.setNumber(number);
 
-//            goodsMapper.getPrice(goodName,seller_id);
+            // 从SecurityContextHolder中获取当前用户
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username;
+            if (principal instanceof UserDetails) {
+                username = ((UserDetails)principal).getUsername();
+            } else {
+                username = principal.toString();
+            }
+            BigInteger userId = userService.getUserId(username);
+
+
+            goodsMapper.getPrice(goodName,seller_id);
 
             return Result.success();
         }

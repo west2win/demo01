@@ -8,8 +8,11 @@ import com.harry.market.common.Result;
 import com.harry.market.entity.Item;
 import com.harry.market.mapper.GoodsMapper;
 import com.harry.market.service.UploadPicService;
+import com.harry.market.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +37,9 @@ import java.util.Date;
 @CrossOrigin(origins ="*")
 public class GoodsController {
 
+    @Autowired
+    private UserService userService;
+
     @Resource
     private GoodsMapper goodsMapper;
 
@@ -45,7 +51,7 @@ public class GoodsController {
     String folder = "item_photo/";
 
     @PostMapping("/upload")
-    public Result upload(@RequestParam String name, @RequestParam BigDecimal price, @RequestParam Integer number, @RequestParam BigInteger seller_id, @RequestParam MultipartFile intro, @RequestParam MultipartFile photo) throws IOException {
+    public Result upload(@RequestParam String name, @RequestParam BigDecimal price, @RequestParam Integer number, @RequestParam MultipartFile intro, @RequestParam MultipartFile photo) throws IOException {
 
         String originalIntroName = intro.getOriginalFilename();
         String introType = FileUtil.extName(originalIntroName);
@@ -84,6 +90,16 @@ public class GoodsController {
         Date date = new Date();
 
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        // 从SecurityContextHolder中获取当前用户id(也就是上传者/卖家的id)
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        BigInteger seller_id = userService.getUserId(username);
 
         saveGoods.setName(name);
         saveGoods.setIntroduction(introUrl);
