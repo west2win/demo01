@@ -55,7 +55,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- mybatis-pl us -->
+        <!-- mybatis-plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
