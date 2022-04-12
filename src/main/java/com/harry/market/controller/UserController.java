@@ -77,7 +77,7 @@ public class UserController {
 
             saveUser.setUsername(username);
             saveUser.setPassword(password);
-            saveUser.setPerm("用户");
+            saveUser.setPerm("user");
 
             // Mybatis-plus 自动填充
 //            saveUser.setIs_deleted(0);

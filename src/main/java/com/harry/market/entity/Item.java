@@ -14,6 +14,7 @@ public class Item {
 
     @TableId(value = "id",type = IdType.AUTO)
     private BigInteger id;
+    private String kind;
     private String name;
     private String introduction;
     private String photo;

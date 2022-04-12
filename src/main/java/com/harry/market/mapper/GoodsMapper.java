@@ -10,11 +10,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
-/**
- * @program: market
- * @author: HarryGao
- * @create: 2022-03-19 16:55
- */
 @Mapper
 public interface GoodsMapper extends BaseMapper<Item> {
 
