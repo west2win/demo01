@@ -1,8 +1,12 @@
 package com.harry.market;
 
+import com.google.common.primitives.UnsignedInteger;
 import com.harry.market.entity.Item;
+import com.harry.market.entity.UserDetails;
 import com.harry.market.service.GoodService;
-import com.harry.market.utils.Crawler;
+
+import com.harry.market.service.UserService;
+import com.harry.market.utils.ExcelUtill;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,16 +19,17 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 
 @SpringBootTest
 class MarketApplicationTests {
 
     @Autowired
     GoodService goodService;
+
+    @Autowired
+    UserService userService;
 
     @Test
     void contextLoads() {
@@ -65,6 +70,11 @@ class MarketApplicationTests {
 //        goodService.insertCrawlerItem("二手书籍");
 //        goodService.insertCrawlerItem("日用家居");
         goodService.insertCrawlerItem("零食饮品");
+    }
+
+    @Test
+    void excelInsert() {
+        userService.insertExcelUser(1,15);
     }
 
 }
