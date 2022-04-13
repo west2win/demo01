@@ -5,10 +5,14 @@ import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.harry.market.common.Constants;
+import com.harry.market.controller.UserController;
 import com.harry.market.controller.dto.UserDTO;
 import com.harry.market.entity.User;
+import com.harry.market.entity.UserDetails;
 import com.harry.market.exception.ServiceException;
+import com.harry.market.mapper.UserDetailsMapper;
 import com.harry.market.mapper.UserMapper;
+import com.harry.market.utils.ExcelUtill;
 import com.harry.market.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,12 @@ public class UserService extends ServiceImpl<UserMapper,User> {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserDetailsMapper userDetailsMapper;
+
+    @Autowired
+    private UserController userController;
 
     private static final Log LOG = Log.get();
 
@@ -74,6 +84,19 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
         return userMapper.selectOne(wrapper).getId();
+    }
+
+    public void insertExcelUser(int row,int num) {
+        ExcelUtill data = new ExcelUtill("D:\\Code\\project\\coporation\\data.xlsx", "data");
+        List<UserDetails> users = data.getExcelUser(row, num);
+        for (UserDetails user : users) {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUsername(user.getUsername());
+            userDTO.setPassword("123456");
+            userController.register(userDTO);
+            userDetailsMapper.insert(user);
+        }
+
     }
 
 }

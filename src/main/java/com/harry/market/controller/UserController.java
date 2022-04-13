@@ -73,7 +73,7 @@ public class UserController {
             User saveUser = new User();
             Date date = new Date();
 
-            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             saveUser.setUsername(username);
             saveUser.setPassword(password);

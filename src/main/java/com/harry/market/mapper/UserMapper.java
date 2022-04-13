@@ -7,12 +7,6 @@ import org.apache.ibatis.annotations.*;
 import java.math.BigInteger;
 import java.util.List;
 
-/**
- * @program: market
- * @author: HarryGao
- * @create: 2022-03-19 14:20
- */
-
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 

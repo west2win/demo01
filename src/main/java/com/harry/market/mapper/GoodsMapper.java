@@ -31,4 +31,10 @@ public interface GoodsMapper extends BaseMapper<Item> {
 
     @Select("select `seller_id` from item where id = #{id}")
     List<BigInteger> getSellerId(BigInteger id);
+
+    @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where kind = #{kind}")
+    List<ItemDTO> selectKind(String kind);
+
+    @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where `name` like \"%${nname}%\"")
+    List<ItemDTO> search(String nname);
 }

@@ -149,10 +149,30 @@ public class GoodsController {
     }
 
     //模糊查询商品名称
-    @GetMapping("/find")
-    public Result find(@RequestParam String nname) {
+    @GetMapping("/find/{nname}")
+    public Result find(@PathVariable String nname) {
         if (goodsMapper.findGoodsName(nname).size() != 0) {
             return Result.success(goodsMapper.findGoodsName(nname));
+        } else {
+            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+        }
+    }
+
+    //分类查询商品
+    @GetMapping("/kind/{kind}")
+    public Result kind(@PathVariable String kind) {
+        if (goodsMapper.selectKind(kind).size() != 0) {
+            return Result.success(goodsMapper.selectKind(kind));
+        } else {
+            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+        }
+    }
+
+    //模糊查询商品
+    @GetMapping("/search/{nname}")
+    public Result search(@PathVariable String nname) {
+        if (goodsMapper.search(nname).size() != 0) {
+            return Result.success(goodsMapper.search(nname));
         } else {
             return Result.error(Constants.CODE_400, "没有查询到类似商品");
         }

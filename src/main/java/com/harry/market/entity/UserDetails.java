@@ -1,6 +1,7 @@
 package com.harry.market.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.google.common.primitives.UnsignedInteger;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -9,7 +10,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
-@TableName(value="user_detail")
+@TableName(value="user_details")
 public class UserDetails {
 
     @TableId(value = "id",type = IdType.AUTO)
@@ -19,7 +20,7 @@ public class UserDetails {
     private String head;
     private Integer gender;
     private Integer age;
-    private Integer tel;
+    private String tel;
     private Integer qq;
     private String introduction;
     @TableLogic
