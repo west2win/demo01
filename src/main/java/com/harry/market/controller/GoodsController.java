@@ -9,6 +9,8 @@ import com.harry.market.entity.Item;
 import com.harry.market.mapper.GoodsMapper;
 import com.harry.market.service.UploadPicService;
 import com.harry.market.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -158,15 +160,68 @@ public class GoodsController {
         }
     }
 
-    //分类查询商品
-    @GetMapping("/kind/{kind}")
-    public Result kind(@PathVariable String kind) {
-        if (goodsMapper.selectKind(kind).size() != 0) {
-            return Result.success(goodsMapper.selectKind(kind));
+//    //分类查询商品
+//    @GetMapping("/kind/{kind}")
+//    public Result kind(@PathVariable String kind) {
+//        if (goodsMapper.selectKind(kind).size() != 0) {
+//            return Result.success(goodsMapper.selectKind(kind));
+//        } else {
+//            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+//        }
+//    }
+
+    @ApiOperation("服饰鞋包")
+    @GetMapping("/find/fsxb")
+    public Result findFSXB() {
+        if (goodsMapper.findGoodsName("服饰鞋包").size() != 0) {
+            return Result.success(goodsMapper.findGoodsName("服饰鞋包"));
         } else {
             return Result.error(Constants.CODE_400, "没有查询到类似商品");
         }
     }
+
+    @ApiOperation("美妆护肤")
+    @GetMapping("/find/mzhf")
+    public Result findMZHF() {
+        if (goodsMapper.findGoodsName("美妆护肤").size() != 0) {
+            return Result.success(goodsMapper.findGoodsName("美妆护肤"));
+        } else {
+            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+        }
+    }
+
+    @ApiOperation("二手书籍")
+    @GetMapping("/find/essj")
+    public Result findESSj() {
+        if (goodsMapper.findGoodsName("二手书籍").size() != 0) {
+            return Result.success(goodsMapper.findGoodsName("二手书籍"));
+        } else {
+            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+        }
+    }
+
+    @ApiOperation("日用家居")
+    @GetMapping("/find/ryjj")
+    public Result findRYJJ() {
+        if (goodsMapper.findGoodsName("日用家居").size() != 0) {
+            return Result.success(goodsMapper.findGoodsName("日用家居"));
+        } else {
+            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+        }
+    }
+
+    @ApiOperation("零食饮品")
+    @GetMapping("/find/lsyp")
+    public Result findLSYP() {
+        if (goodsMapper.findGoodsName("零食饮品").size() != 0) {
+            return Result.success(goodsMapper.findGoodsName("零食饮品"));
+        } else {
+            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+        }
+    }
+
+
+
 
     //模糊查询商品
     @GetMapping("/search/{nname}")
