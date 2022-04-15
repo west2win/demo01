@@ -172,8 +172,8 @@ public class GoodsController {
 
     @ApiOperation("服饰鞋包")
     @GetMapping("/find/fsxb")
-    public Result findFSXB() {
-        if (goodsMapper.findGoodsName("服饰鞋包").size() != 0) {
+    public Result findFSXB(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        if (goodsMapper.selectKind("服饰鞋包",pageNum,pageSize).size() != 0) {
             return Result.success(goodsMapper.findGoodsName("服饰鞋包"));
         } else {
             return Result.error(Constants.CODE_400, "没有查询到类似商品");
@@ -182,9 +182,9 @@ public class GoodsController {
 
     @ApiOperation("美妆护肤")
     @GetMapping("/find/mzhf")
-    public Result findMZHF() {
-        if (goodsMapper.findGoodsName("美妆护肤").size() != 0) {
-            return Result.success(goodsMapper.findGoodsName("美妆护肤"));
+    public Result findMZHF(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        if (goodsMapper.selectKind("美妆护肤",pageNum,pageSize).size() != 0) {
+            return Result.success(goodsMapper.selectKind("美妆护肤",pageNum,pageSize));
         } else {
             return Result.error(Constants.CODE_400, "没有查询到类似商品");
         }
@@ -192,9 +192,9 @@ public class GoodsController {
 
     @ApiOperation("二手书籍")
     @GetMapping("/find/essj")
-    public Result findESSj() {
-        if (goodsMapper.findGoodsName("二手书籍").size() != 0) {
-            return Result.success(goodsMapper.findGoodsName("二手书籍"));
+    public Result findESSj(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        if (goodsMapper.selectKind("二手书籍",pageNum,pageSize).size() != 0) {
+            return Result.success(goodsMapper.selectKind("二手书籍",pageNum,pageSize));
         } else {
             return Result.error(Constants.CODE_400, "没有查询到类似商品");
         }
@@ -202,9 +202,9 @@ public class GoodsController {
 
     @ApiOperation("日用家居")
     @GetMapping("/find/ryjj")
-    public Result findRYJJ() {
-        if (goodsMapper.findGoodsName("日用家居").size() != 0) {
-            return Result.success(goodsMapper.findGoodsName("日用家居"));
+    public Result findRYJJ(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        if (goodsMapper.selectKind("日用家居",pageNum,pageSize).size() != 0) {
+            return Result.success(goodsMapper.selectKind("日用家居",pageNum,pageSize));
         } else {
             return Result.error(Constants.CODE_400, "没有查询到类似商品");
         }
@@ -212,14 +212,13 @@ public class GoodsController {
 
     @ApiOperation("零食饮品")
     @GetMapping("/find/lsyp")
-    public Result findLSYP() {
-        if (goodsMapper.findGoodsName("零食饮品").size() != 0) {
-            return Result.success(goodsMapper.findGoodsName("零食饮品"));
+    public Result findLSYP(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        if (goodsMapper.selectKind("零食饮品",pageNum,pageSize).size() != 0) {
+            return Result.success(goodsMapper.selectKind("零食饮品",pageNum,pageSize));
         } else {
             return Result.error(Constants.CODE_400, "没有查询到类似商品");
         }
     }
-
 
 
 

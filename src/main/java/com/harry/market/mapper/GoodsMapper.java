@@ -17,7 +17,7 @@ public interface GoodsMapper extends BaseMapper<Item> {
     List<Item> audit();
 
 //    @Select("select  id,name,introduction,photo,price from item limit #{pageNum},#{pageSize}")
-    @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id limit 1,5")
+    @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id limit #{pageNum},#{pageSize}")
     List<ItemDTO> selectPage(Integer pageNum, Integer pageSize);
 
     @Select("select  * from item where id = #{id}")
@@ -32,8 +32,8 @@ public interface GoodsMapper extends BaseMapper<Item> {
     @Select("select `seller_id` from item where id = #{id}")
     List<BigInteger> getSellerId(BigInteger id);
 
-    @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where kind = #{kind}")
-    List<ItemDTO> selectKind(String kind);
+    @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where kind = #{kind} limit #{pageNum},#{pageSize}")
+    List<ItemDTO> selectKind(String kind,Integer pageNum, Integer pageSize);
 
     @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where `name` like \"%${nname}%\"")
     List<ItemDTO> search(String nname);
