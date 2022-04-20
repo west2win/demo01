@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.harry.market.common.Constants;
 import com.harry.market.controller.UserController;
 import com.harry.market.controller.dto.UserDTO;
+import com.harry.market.controller.dto.UserInfoDTO;
 import com.harry.market.entity.User;
 import com.harry.market.entity.UserDetails;
 import com.harry.market.exception.ServiceException;
@@ -15,17 +16,13 @@ import com.harry.market.mapper.UserMapper;
 import com.harry.market.utils.ExcelUtill;
 import com.harry.market.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @program: market
- * @author: HarryGao
- * @create: 2022-03-19 14:20
- */
 
 @Service
 public class UserService extends ServiceImpl<UserMapper,User> {
@@ -86,6 +83,11 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         return userMapper.selectOne(wrapper).getId();
     }
 
+    /**
+     *
+     * @param row 从几行开始输入
+     * @param num 输入几条数据
+     */
     public void insertExcelUser(int row,int num) {
         ExcelUtill data = new ExcelUtill("D:\\Code\\project\\coporation\\data.xlsx", "data");
         List<UserDetails> users = data.getExcelUser(row, num);
@@ -97,6 +99,19 @@ public class UserService extends ServiceImpl<UserMapper,User> {
             userDetailsMapper.insert(user);
         }
 
+    }
+
+    public UserInfoDTO getUserInfo() {
+        String username;
+        //从springsecurity中取出当前用户
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        return userDetailsMapper.getUserInfo(username);
     }
 
 }

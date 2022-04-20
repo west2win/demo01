@@ -119,6 +119,7 @@ public class OssUtills {
                 e.printStackTrace();
             }
         }
+        ossClient.shutdown();
     }
 
     //上传一张图片

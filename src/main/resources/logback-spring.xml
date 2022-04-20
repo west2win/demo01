@@ -168,6 +168,7 @@
     <logger name="org.springframework" level="INFO"></logger>
     <logger name="org.mybatis" level="INFO"></logger>
     <logger name="org.apache.zookeeper" level="INFO"></logger>
+    <logger name="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" level="WARN"/>
 
     <!-- 4. 最终的策略 -->
     <!-- 4.1 开发环境:打印控制台-->

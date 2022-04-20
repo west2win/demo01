@@ -16,6 +16,12 @@ public interface OrderMapper extends BaseMapper<Order> {
     @Select("Update item Set number = number - #{dealNumber} Where id = #{goodsId}")
     List<Item> deal(BigInteger goodsId, Integer dealNumber);
 
+    @Select("select seller_id from item where id = #{goodId}")
+    String getSellerId(BigInteger goodId);
+
+    @Insert("")
+    void newUserOder();
+
     @Insert("")
     void newOrder();
 

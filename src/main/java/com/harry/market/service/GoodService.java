@@ -22,6 +22,7 @@ public class GoodService extends ServiceImpl<GoodsMapper, Item> {
     @Autowired
     private GoodsMapper goodsMapper;
 
+
     public Item getGood(BigInteger good_id) {
         QueryWrapper<Item> wrapper = new QueryWrapper<>();
         wrapper.eq("id",good_id);
@@ -36,6 +37,7 @@ public class GoodService extends ServiceImpl<GoodsMapper, Item> {
             goodsMapper.insert(item);
         }
     }
+
 
 
 }

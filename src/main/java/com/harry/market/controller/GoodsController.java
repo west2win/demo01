@@ -9,7 +9,7 @@ import com.harry.market.entity.Item;
 import com.harry.market.mapper.GoodsMapper;
 import com.harry.market.service.UploadPicService;
 import com.harry.market.service.UserService;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -138,10 +137,34 @@ public class GoodsController {
         }
 
     //分页查询接口
+    @ApiOperation("全种类分页")
+//    @ApiImplicitParam(name = "order",value = "默认综合|asc价格升序|desc价格降序|newest最新")
     @GetMapping("/page")
-    public Result page(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
-        pageNum = (pageNum - 1) * pageSize;
-        return Result.success(goodsMapper.selectPage(pageNum, pageSize));
+    public Result page(@RequestParam(defaultValue = "default") String order,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Result result;
+        if ("asc".equals(order)||"desc".equals(order)) {
+            if (goodsMapper.selectPage(order, pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectPage(order, pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("newest".equals(order)) {
+            if (goodsMapper.selectNewest(pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectNewest(pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("default".equals(order)) {
+            if (goodsMapper.selectDefault( pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectDefault( pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else {
+            result = Result.error(Constants.CODE_400,"传参错了");
+        }
+
+        return result;
     }
 
     //商品详情查询
@@ -151,7 +174,7 @@ public class GoodsController {
     }
 
     //模糊查询商品名称
-    @GetMapping("/find/{nname}")
+//    @GetMapping("/find/{nname}")
     public Result find(@PathVariable String nname) {
         if (goodsMapper.findGoodsName(nname).size() != 0) {
             return Result.success(goodsMapper.findGoodsName(nname));
@@ -171,53 +194,153 @@ public class GoodsController {
 //    }
 
     @ApiOperation("服饰鞋包")
+//    @ApiImplicitParam(name = "order",value = "默认综合|asc价格升序|desc价格降序|newest最新")
     @GetMapping("/find/fsxb")
-    public Result findFSXB(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
-        if (goodsMapper.selectKind("服饰鞋包",pageNum,pageSize).size() != 0) {
-            return Result.success(goodsMapper.findGoodsName("服饰鞋包"));
+    public Result findFSXB(@RequestParam(defaultValue = "default") String order,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Result result;
+        if ("asc".equals(order)||"desc".equals(order)) {
+            if (goodsMapper.selectKind(order, "服饰鞋包", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKind(order, "服饰鞋包", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("newest".equals(order)) {
+            if (goodsMapper.selectKindNewest("服饰鞋包", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindNewest( "服饰鞋包", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("default".equals(order)) {
+            if (goodsMapper.selectKindDefault("服饰鞋包", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindDefault( "服饰鞋包", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
         } else {
-            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+            result = Result.error(Constants.CODE_400,"传参错了");
         }
+
+        return result;
     }
 
     @ApiOperation("美妆护肤")
+//    @ApiImplicitParam(name = "order",value = "默认综合|asc价格升序|desc价格降序|newest最新")
     @GetMapping("/find/mzhf")
-    public Result findMZHF(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
-        if (goodsMapper.selectKind("美妆护肤",pageNum,pageSize).size() != 0) {
-            return Result.success(goodsMapper.selectKind("美妆护肤",pageNum,pageSize));
+    public Result findMZHF(@RequestParam(defaultValue = "asc") String order,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Result result;
+        if ("asc".equals(order)||"desc".equals(order)) {
+            if (goodsMapper.selectKind(order, "美妆护肤", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKind(order, "美妆护肤", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("newest".equals(order)) {
+            if (goodsMapper.selectKindNewest("美妆护肤", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindNewest( "美妆护肤", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("default".equals(order)) {
+            if (goodsMapper.selectKindDefault("美妆护肤", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindDefault( "美妆护肤", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
         } else {
-            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+            result = Result.error(Constants.CODE_400,"传参错了");
         }
+
+        return result;
     }
 
     @ApiOperation("二手书籍")
+//    @ApiImplicitParam(name = "order",value = "默认综合|asc价格升序|desc价格降序|newest最新")
     @GetMapping("/find/essj")
-    public Result findESSj(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
-        if (goodsMapper.selectKind("二手书籍",pageNum,pageSize).size() != 0) {
-            return Result.success(goodsMapper.selectKind("二手书籍",pageNum,pageSize));
+    public Result findESSj(@RequestParam(defaultValue = "asc") String order,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Result result;
+        if ("asc".equals(order)||"desc".equals(order)) {
+            if (goodsMapper.selectKind(order, "二手书籍", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKind(order, "二手书籍", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("newest".equals(order)) {
+            if (goodsMapper.selectKindNewest("二手书籍", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindNewest( "二手书籍", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("default".equals(order)) {
+            if (goodsMapper.selectKindDefault("二手书籍", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindDefault( "二手书籍", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
         } else {
-            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+            result = Result.error(Constants.CODE_400,"传参错了");
         }
+
+        return result;
     }
 
     @ApiOperation("日用家居")
+//    @ApiImplicitParam(name = "order",value = "默认综合|asc价格升序|desc价格降序|newest最新")
     @GetMapping("/find/ryjj")
-    public Result findRYJJ(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
-        if (goodsMapper.selectKind("日用家居",pageNum,pageSize).size() != 0) {
-            return Result.success(goodsMapper.selectKind("日用家居",pageNum,pageSize));
+    public Result findRYJJ(@RequestParam(defaultValue = "asc") String order,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Result result;
+        if ("asc".equals(order)||"desc".equals(order)) {
+            if (goodsMapper.selectKind(order, "日用家居", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKind(order, "日用家居", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("newest".equals(order)) {
+            if (goodsMapper.selectKindNewest("日用家居", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindNewest( "日用家居", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("default".equals(order)) {
+            if (goodsMapper.selectKindDefault("日用家居", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindDefault( "日用家居", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
         } else {
-            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+            result = Result.error(Constants.CODE_400,"传参错了");
         }
+
+        return result;
     }
 
     @ApiOperation("零食饮品")
+//    @ApiImplicitParam(name = "order",value = "默认综合|asc价格升序|desc价格降序|newest最新")
     @GetMapping("/find/lsyp")
-    public Result findLSYP(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
-        if (goodsMapper.selectKind("零食饮品",pageNum,pageSize).size() != 0) {
-            return Result.success(goodsMapper.selectKind("零食饮品",pageNum,pageSize));
+    public Result findLSYP(@RequestParam(defaultValue = "asc") String order,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Result result;
+        if ("asc".equals(order)||"desc".equals(order)) {
+            if (goodsMapper.selectKind(order, "零食饮品", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKind(order, "零食饮品", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("newest".equals(order)) {
+            if (goodsMapper.selectKindNewest("零食饮品", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindNewest( "零食饮品", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("default".equals(order)) {
+            if (goodsMapper.selectKindDefault("零食饮品", pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectKindDefault( "零食饮品", pageNum, pageSize));
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
         } else {
-            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+            result = Result.error(Constants.CODE_400,"传参错了");
         }
+
+        return result;
     }
 
 
@@ -232,5 +355,10 @@ public class GoodsController {
         }
     }
 
+
+//    @PostMapping("/deal")
+//    public Result deal(BigInteger goodId,int buyNum) {
+//        //TODO
+//    }
 
 }

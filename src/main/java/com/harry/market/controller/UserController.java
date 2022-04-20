@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.controller.dto.UserDTO;
+import com.harry.market.controller.dto.UserInfoDTO;
 import com.harry.market.entity.User;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.service.UserService;
@@ -97,6 +98,13 @@ public class UserController {
     //查询所有数据
     @GetMapping()
     public Result findAll() {return Result.success(userService.list());}
+
+    //获取用户信息(头像、昵称、联系方式等)
+    @GetMapping("/get")
+    public Result getUserInfo() {
+        UserInfoDTO userInfo = userService.getUserInfo();
+        return Result.success(userInfo);
+    }
 
 }
 
