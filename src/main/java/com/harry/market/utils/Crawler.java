@@ -33,14 +33,14 @@ public class Crawler {
                 String price = el.getElementsByClass("p-price").get(0).getElementsByTag("i").get(0).text();
 
                 Item item = new Item();
-                BigInteger nid = new BigInteger(id);
+                Long nid = new Long(id);
                 item.setId(nid);
                 item.setName(pname);
                 item.setPhoto(img);
                 BigDecimal nprice = new BigDecimal(price);
                 item.setPrice(nprice);
                 Random seed = new Random();
-                BigInteger sid = BigInteger.valueOf(seed.nextInt(10));
+                Long sid = Long.valueOf(seed.nextInt(10));
                 item.setNumber(seed.nextInt(999));
                 item.setSeller_id(sid);
                 item.setKind(kind);

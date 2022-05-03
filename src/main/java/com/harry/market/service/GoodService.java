@@ -23,7 +23,7 @@ public class GoodService extends ServiceImpl<GoodsMapper, Item> {
     private GoodsMapper goodsMapper;
 
 
-    public Item getGood(BigInteger good_id) {
+    public Item getGood(Long good_id) {
         QueryWrapper<Item> wrapper = new QueryWrapper<>();
         wrapper.eq("id",good_id);
         wrapper.eq("is_audit",0);

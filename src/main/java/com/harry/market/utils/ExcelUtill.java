@@ -54,6 +54,7 @@ public class ExcelUtill {
 
             String username;
             String nickname;
+            String realname;
             String head;
             Integer gender;
             Integer age;
@@ -61,7 +62,8 @@ public class ExcelUtill {
             Integer qq;
             String introduction;
 
-            username = getExcelDateByIndex(i,0);
+            username = getExcelDateByIndex(i,3);
+            realname = getExcelDateByIndex(i,0);
             nickname = getExcelDateByIndex(i,2);
             head = getExcelDateByIndex(i,33);
             if ("男".equals(getExcelDateByIndex(i,4))) {
@@ -77,6 +79,7 @@ public class ExcelUtill {
             introduction = getExcelDateByIndex(i,14);
 
             userDetails.setUsername(username);
+            userDetails.setRealname(realname);
             userDetails.setNickname(nickname);
             userDetails.setHead(head);
             userDetails.setGender(gender);

@@ -16,7 +16,9 @@ import com.harry.market.mapper.UserMapper;
 import com.harry.market.utils.ExcelUtill;
 import com.harry.market.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -34,23 +36,28 @@ public class UserService extends ServiceImpl<UserMapper,User> {
     private UserDetailsMapper userDetailsMapper;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserController userController;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     private static final Log LOG = Log.get();
 
     public UserDTO login(UserDTO userDTO) {
-        userDTO.setPassword(Md5Utils.code(userDTO.getPassword()));
-        User one = getUserInfo(userDTO);
-
-        if(one !=null){
-            BeanUtil.copyProperties(one,userDTO,true);
+//        userDTO.setPassword(Md5Utils.code(userDTO.getPassword()));
+        String password = getUserPwd(userDTO.getUsername());
+        if (password != null && encoder.matches(userDTO.getPassword(),password)) {
+            userDTO.setPassword(password);
             return userDTO;
-        }else{
+        } else {
             throw new ServiceException(Constants.CODE_600,"用户名或密码错误");
         }
     }
 
-    private User getUserInfo(UserDTO userDTO){
+    public User getUserInfo(UserDTO userDTO){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",userDTO.getUsername());
         queryWrapper.eq("password",userDTO.getPassword());
@@ -62,6 +69,19 @@ public class UserService extends ServiceImpl<UserMapper,User> {
             throw new ServiceException(Constants.CODE_500,"系统错误");
         }
         return one;
+    }
+
+    private String getUserPwd(String loginName){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username",loginName);
+        String password;
+        try{
+            password=getOne(queryWrapper).getPassword(); //从数据库查询用户信息
+        }catch(Exception e){
+            LOG.error(e);
+            throw new ServiceException(Constants.CODE_500,"系统错误");
+        }
+        return password;
     }
 
     public String getUserPerm(String username) {
@@ -77,7 +97,7 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         return userMapper.selectOne(wrapper);
     }
 
-    public BigInteger getUserId(String username) {
+    public Long getUserId(String username) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
         return userMapper.selectOne(wrapper).getId();
@@ -96,22 +116,35 @@ public class UserService extends ServiceImpl<UserMapper,User> {
             userDTO.setUsername(user.getUsername());
             userDTO.setPassword("123456");
             userController.register(userDTO);
-            userDetailsMapper.insert(user);
+            user.setId(userService.getUserId(userDTO.getUsername()));
+            userDetailsMapper.updateById(user);
         }
 
     }
 
-    public UserInfoDTO getUserInfo() {
-        String username;
-        //从springsecurity中取出当前用户
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
+//    public UserInfoDTO getUserInfo() {
+//        String username;
+//        //从springsecurity中取出当前用户
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            username = ((UserDetails)principal).getUsername();
+//        } else {
+//            username = principal.toString();
+//        }
+//
+//        return userDetailsMapper.getUserInfo(username);
+//    }
 
-        return userDetailsMapper.getUserInfo(username);
+    public UserInfoDTO getUserInfoById(String id) {
+        User one;
+        UserInfoDTO info;
+        try{
+            info = userDetailsMapper.getUserInfo(id);
+        }catch(Exception e){
+            LOG.error(e);
+            throw new ServiceException(Constants.CODE_500,"系统错误");
+        }
+        return info;
     }
 
 }

@@ -45,22 +45,23 @@ public class OrderController {
     @Autowired
     private GoodService goodService;
 
-    //交易成功
-    @PostMapping("/deal")
-    public Result deal(@RequestParam BigInteger goodsId, @RequestParam Integer dealNumber){
-        if(goodsMapper.findGoods(goodsId).get((goodsId).intValue()).getNumber()<dealNumber){ //判断库存数量是否够卖
-            return Result.error(Constants.CODE_400, "库存商品不足");
-        }else{
-            return Result.success(orderMapper.deal(goodsId,dealNumber));
-        }
-    }
+//    //交易成功
+//    @PostMapping("/deal")
+//    public Result deal(@RequestParam BigInteger goodsId, @RequestParam Integer dealNumber){
+//        if(goodsMapper.findGoods(goodsId).get((goodsId).intValue()).getNumber()<dealNumber){ //判断库存数量是否够卖
+//            return Result.error(Constants.CODE_400, "库存商品不足");
+//        }else{
+//            return Result.success(orderMapper.deal(goodsId,dealNumber));
+//        }
+//    }
 
     //创建订单
     @PostMapping("/newOrder")
     public Result newOrder(@RequestBody OrderDTO orderDTO) {
-        BigInteger good_id = orderDTO.getGood_id();
+        Long buyer_id = orderDTO.getBuyer_id();
+        Long good_id = orderDTO.getGood_id();
         Integer number = orderDTO.getNumber();
-        if (good_id == null || number == null) {
+        if (buyer_id == null || good_id == null || number == null) {
             return Result.error(Constants.CODE_400, "参数错误");
         } else if (number.intValue() <= 0) {
             return Result.error(Constants.CODE_400, "购买数量不正确");
@@ -73,23 +74,24 @@ public class OrderController {
                 return Result.error(Constants.CODE_400,"不存在该商品或该商品未经审核");
             }
             String goodName = item.getName();
-            BigInteger seller_id = item.getSeller_id();
+            Long seller_id = item.getSeller_id();
             BigDecimal perPrice = item.getPrice();
 
 
+//            // 从SecurityContextHolder中获取当前用户
+//            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            String username;
+//            if (principal instanceof UserDetails) {
+//                username = ((UserDetails)principal).getUsername();
+//            } else {
+//                username = principal.toString();
+//            }
 
-            // 从SecurityContextHolder中获取当前用户
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username;
-            if (principal instanceof UserDetails) {
-                username = ((UserDetails)principal).getUsername();
-            } else {
-                username = principal.toString();
-            }
-            BigInteger userId = userService.getUserId(username);
-
-            userOrder.setUser_id(userId);
+            userOrder.setUser_id(buyer_id);
             userOrder.setItem_id(good_id);
+            System.out.println("==========");
+            System.out.println(userOrder);
+            System.out.println("==========");
 
             userOrderMapper.insert(userOrder);
 

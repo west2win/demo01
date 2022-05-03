@@ -6,8 +6,8 @@ import java.math.BigInteger;
 
 @Data
 public class OrderDTO {
-
-    private BigInteger good_id;
+    private Long buyer_id;
+    private Long good_id;
     private Integer number;
 
 }

@@ -6,9 +6,12 @@ import com.harry.market.common.Result;
 import com.harry.market.controller.dto.UserDTO;
 import com.harry.market.controller.dto.UserInfoDTO;
 import com.harry.market.entity.User;
+import com.harry.market.entity.UserDetails;
+import com.harry.market.mapper.UserDetailsMapper;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.service.UserService;
 import com.harry.market.utils.Md5Utils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,8 +40,14 @@ public class UserController {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private UserDetailsMapper userDetailsMapper;
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @PostMapping("/login")
     public Result login(@RequestBody UserDTO userDTO) {
@@ -49,8 +58,9 @@ public class UserController {
         }else if(userMapper.sameName(username).get(0).getPerm().equals("管理员")){
             return Result.adminSuccess();
         }else{
-            userService.login(userDTO);
-            return Result.success(userDTO.getId());
+            UserDTO login = userService.login(userDTO);
+//            return Result.success(userDTO.getId());
+            return Result.success(userService.getUserInfo(login));
         }
 
     }
@@ -62,8 +72,7 @@ public class UserController {
 
         // 改成强hash加密
         String password = userDTO.getPassword();
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        password = passwordEncoder.encode(password);
+        password = encoder.encode(password);
 
         userDTO.setPassword(password);
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
@@ -72,8 +81,7 @@ public class UserController {
             return Result.error(Constants.CODE_400, "此用户名已被注册");
         }else {
             User saveUser = new User();
-            Date date = new Date();
-
+//            Date date = new Date();
 //            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             saveUser.setUsername(username);
@@ -86,6 +94,12 @@ public class UserController {
 //            saveUser.setGmt_modified(Timestamp.valueOf(simpleDate.format(date)));
 
             userMapper.insert(saveUser);
+
+            UserDetails ud = new UserDetails();
+            ud.setId(userService.getUserId(saveUser.getUsername()));
+            ud.setUsername(saveUser.getUsername());
+            userDetailsMapper.insert(ud);
+
             return Result.success();
         }
     }
@@ -101,8 +115,8 @@ public class UserController {
 
     //获取用户信息(头像、昵称、联系方式等)
     @GetMapping("/get")
-    public Result getUserInfo() {
-        UserInfoDTO userInfo = userService.getUserInfo();
+    public Result getUserInfo(@RequestParam String id) {
+        UserInfoDTO userInfo = userService.getUserInfoById(id);
         return Result.success(userInfo);
     }
 

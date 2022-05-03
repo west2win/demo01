@@ -26,12 +26,6 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * @program: market
- * @author: HarryGao
- * @create: 2022-03-19 16:40
- */
-
 @ResponseBody
 @RestController
 @RequestMapping("/items")
@@ -100,7 +94,7 @@ public class GoodsController {
         } else {
             username = principal.toString();
         }
-        BigInteger seller_id = userService.getUserId(username);
+        Long seller_id = userService.getUserId(username);
 
         saveGoods.setName(name);
         saveGoods.setIntroduction(introUrl);
@@ -144,19 +138,19 @@ public class GoodsController {
         Result result;
         if ("asc".equals(order)||"desc".equals(order)) {
             if (goodsMapper.selectPage(order, pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectPage(order, pageNum, pageSize));
+                result = Result.success(goodsMapper.selectPage(order, pageNum, pageSize),goodsMapper.getTotalNum().toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("newest".equals(order)) {
             if (goodsMapper.selectNewest(pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectNewest(pageNum, pageSize));
+                result = Result.success(goodsMapper.selectNewest(pageNum, pageSize),goodsMapper.getTotalNum().toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("default".equals(order)) {
             if (goodsMapper.selectDefault( pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectDefault( pageNum, pageSize));
+                result = Result.success(goodsMapper.selectDefault( pageNum, pageSize),goodsMapper.getTotalNum().toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
@@ -175,13 +169,13 @@ public class GoodsController {
 
     //模糊查询商品名称
 //    @GetMapping("/find/{nname}")
-    public Result find(@PathVariable String nname) {
-        if (goodsMapper.findGoodsName(nname).size() != 0) {
-            return Result.success(goodsMapper.findGoodsName(nname));
-        } else {
-            return Result.error(Constants.CODE_400, "没有查询到类似商品");
-        }
-    }
+//    public Result find(@PathVariable String nname) {
+//        if (goodsMapper.findGoodsName(nname).size() != 0) {
+//            return Result.success(goodsMapper.findGoodsName(nname));
+//        } else {
+//            return Result.error(Constants.CODE_400, "没有查询到类似商品");
+//        }
+//    }
 
 //    //分类查询商品
 //    @GetMapping("/kind/{kind}")
@@ -200,19 +194,19 @@ public class GoodsController {
         Result result;
         if ("asc".equals(order)||"desc".equals(order)) {
             if (goodsMapper.selectKind(order, "服饰鞋包", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKind(order, "服饰鞋包", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKind(order, "服饰鞋包", pageNum, pageSize),goodsMapper.getTotalNumByKind("服饰鞋包").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("newest".equals(order)) {
             if (goodsMapper.selectKindNewest("服饰鞋包", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindNewest( "服饰鞋包", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindNewest( "服饰鞋包", pageNum, pageSize),goodsMapper.getTotalNumByKind("服饰鞋包").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("default".equals(order)) {
             if (goodsMapper.selectKindDefault("服饰鞋包", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindDefault( "服饰鞋包", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindDefault( "服饰鞋包", pageNum, pageSize),goodsMapper.getTotalNumByKind("服饰鞋包").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
@@ -230,19 +224,19 @@ public class GoodsController {
         Result result;
         if ("asc".equals(order)||"desc".equals(order)) {
             if (goodsMapper.selectKind(order, "美妆护肤", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKind(order, "美妆护肤", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKind(order, "美妆护肤", pageNum, pageSize),goodsMapper.getTotalNumByKind("美妆护肤").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("newest".equals(order)) {
             if (goodsMapper.selectKindNewest("美妆护肤", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindNewest( "美妆护肤", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindNewest( "美妆护肤", pageNum, pageSize),goodsMapper.getTotalNumByKind("美妆护肤").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("default".equals(order)) {
             if (goodsMapper.selectKindDefault("美妆护肤", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindDefault( "美妆护肤", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindDefault( "美妆护肤", pageNum, pageSize),goodsMapper.getTotalNumByKind("美妆护肤").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
@@ -260,19 +254,19 @@ public class GoodsController {
         Result result;
         if ("asc".equals(order)||"desc".equals(order)) {
             if (goodsMapper.selectKind(order, "二手书籍", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKind(order, "二手书籍", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKind(order, "二手书籍", pageNum, pageSize),goodsMapper.getTotalNumByKind("二手书籍").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("newest".equals(order)) {
             if (goodsMapper.selectKindNewest("二手书籍", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindNewest( "二手书籍", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindNewest( "二手书籍", pageNum, pageSize),goodsMapper.getTotalNumByKind("二手书籍").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("default".equals(order)) {
             if (goodsMapper.selectKindDefault("二手书籍", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindDefault( "二手书籍", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindDefault( "二手书籍", pageNum, pageSize),goodsMapper.getTotalNumByKind("二手书籍").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
@@ -290,19 +284,19 @@ public class GoodsController {
         Result result;
         if ("asc".equals(order)||"desc".equals(order)) {
             if (goodsMapper.selectKind(order, "日用家居", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKind(order, "日用家居", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKind(order, "日用家居", pageNum, pageSize),goodsMapper.getTotalNumByKind("日用家居").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("newest".equals(order)) {
             if (goodsMapper.selectKindNewest("日用家居", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindNewest( "日用家居", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindNewest( "日用家居", pageNum, pageSize),goodsMapper.getTotalNumByKind("日用家居").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("default".equals(order)) {
             if (goodsMapper.selectKindDefault("日用家居", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindDefault( "日用家居", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindDefault( "日用家居", pageNum, pageSize),goodsMapper.getTotalNumByKind("日用家居").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
@@ -320,19 +314,19 @@ public class GoodsController {
         Result result;
         if ("asc".equals(order)||"desc".equals(order)) {
             if (goodsMapper.selectKind(order, "零食饮品", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKind(order, "零食饮品", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKind(order, "零食饮品", pageNum, pageSize),goodsMapper.getTotalNumByKind("零食饮品").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("newest".equals(order)) {
             if (goodsMapper.selectKindNewest("零食饮品", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindNewest( "零食饮品", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindNewest( "零食饮品", pageNum, pageSize),goodsMapper.getTotalNumByKind("零食饮品").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
         } else if ("default".equals(order)) {
             if (goodsMapper.selectKindDefault("零食饮品", pageNum, pageSize).size() != 0) {
-                result = Result.success(goodsMapper.selectKindDefault( "零食饮品", pageNum, pageSize));
+                result = Result.success(goodsMapper.selectKindDefault( "零食饮品", pageNum, pageSize),goodsMapper.getTotalNumByKind("零食饮品").toString());
             } else {
                 result = Result.error(Constants.CODE_400, "没有查询到类似商品");
             }
@@ -357,8 +351,8 @@ public class GoodsController {
 
 
 //    @PostMapping("/deal")
-//    public Result deal(BigInteger goodId,int buyNum) {
-//        //TODO
+//    public Result deal(@RequestParam("购买者id") String buyId,@RequestParam("商品id") BigInteger goodId,@RequestParam("购买数量") int buyNum) {
+//        TODO
 //    }
 
 }

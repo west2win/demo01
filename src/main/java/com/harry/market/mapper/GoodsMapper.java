@@ -52,4 +52,9 @@ public interface GoodsMapper extends BaseMapper<Item> {
 
     @Select("select COUNT(*) from item")
     Integer getTotalNum();
+
+    @Select("select COUNT(*) from item where kind = #{kind}")
+    Integer getTotalNumByKind(String kind);
+
+
 }

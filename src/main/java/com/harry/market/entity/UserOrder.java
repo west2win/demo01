@@ -13,10 +13,10 @@ import java.util.Date;
 @TableName(value="user_order")
 public class UserOrder {
 
-    @TableId(value = "id",type = IdType.AUTO)
-    private BigInteger id;
-    private BigInteger user_id;
-    private BigInteger item_id;
+    @TableId(value="id",type = IdType.ASSIGN_ID)
+    private Long id;
+    private Long user_id;
+    private Long item_id;
     @TableLogic
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)

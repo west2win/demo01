@@ -8,6 +8,6 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface UserDetailsMapper extends BaseMapper<UserDetails> {
-    @Select("select nickname,head,age,tel,qq,introduction from user_details where username = #{username}")
-    UserInfoDTO getUserInfo(String username);
+    @Select("select nickname,head,age,tel,qq,introduction from user_details where id = #{id}")
+    UserInfoDTO getUserInfo(String id);
 }

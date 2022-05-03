@@ -11,8 +11,9 @@ import java.util.Date;
 @TableName(value="user")
 public class User {
 
-    @TableId(value="id",type = IdType.AUTO)
-    private BigInteger id;
+//    @TableId(value="id",type = IdType.AUTO)
+    @TableId(value="id",type = IdType.ASSIGN_ID)
+    private Long id;
     private String username;
     private String password;
     private String perm;

@@ -12,15 +12,15 @@ import java.util.Date;
 @TableName(value="item")
 public class Item {
 
-    @TableId(value = "id",type = IdType.AUTO)
-    private BigInteger id;
+    @TableId(value = "id",type = IdType.ASSIGN_ID)
+    private Long id;
     private String kind;
     private String name;
     private String introduction;
     private String photo;
     private BigDecimal price;
     private Integer number;
-    private BigInteger seller_id;
+    private Long seller_id;
     private boolean is_audit;
     @TableLogic
     private boolean is_deleted;

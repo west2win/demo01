@@ -9,13 +9,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
-@TableName(value="order")
+@TableName(value="`order`")
 public class Order {
 
-    @TableId(value = "id",type = IdType.AUTO)
-    private BigInteger id;
+    @TableId(value="id",type = IdType.ASSIGN_ID)
+    private Long id;
     private String item;
-    private BigInteger seller_id;
+    private Long seller_id;
     private Integer number;
     private BigDecimal per_price;
     private boolean status;
