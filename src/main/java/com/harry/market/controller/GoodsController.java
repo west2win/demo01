@@ -46,7 +46,7 @@ public class GoodsController {
     String folder = "item_photo/";
 
     @PostMapping("/upload")
-    public Result upload(@RequestParam String name, @RequestParam BigDecimal price, @RequestParam Integer number, @RequestParam MultipartFile intro, @RequestParam MultipartFile photo) throws IOException {
+    public Result upload(@RequestParam Long id,@RequestParam String name, @RequestParam BigDecimal price, @RequestParam Integer number, @RequestParam MultipartFile intro, @RequestParam MultipartFile photo) throws IOException {
 
         String originalIntroName = intro.getOriginalFilename();
         String introType = FileUtil.extName(originalIntroName);
@@ -86,15 +86,16 @@ public class GoodsController {
 
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        // 从SecurityContextHolder中获取当前用户id(也就是上传者/卖家的id)
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-        Long seller_id = userService.getUserId(username);
+//        // 从SecurityContextHolder中获取当前用户id(也就是上传者/卖家的id)
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String username;
+//        if (principal instanceof UserDetails) {
+//            username = ((UserDetails)principal).getUsername();
+//        } else {
+//            username = principal.toString();
+//        }
+//        Long seller_id = userService.getUserId(username);
+        Long seller_id = id;
 
         saveGoods.setName(name);
         saveGoods.setIntroduction(introUrl);
