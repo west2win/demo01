@@ -3,7 +3,7 @@ package com.harry.market.controller.dto;
 import lombok.Data;
 
 @Data
-public class UserInfoDTO {
+public class UserInfoVO {
     //返回给前端的用户信息
     private String head;
     private String nickName;

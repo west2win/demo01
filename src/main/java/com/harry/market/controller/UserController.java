@@ -4,17 +4,14 @@ import cn.hutool.core.util.StrUtil;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.controller.dto.UserDTO;
-import com.harry.market.controller.dto.UserInfoDTO;
+import com.harry.market.controller.dto.UserInfoVO;
 import com.harry.market.entity.User;
 import com.harry.market.entity.UserDetails;
 import com.harry.market.mapper.UserDetailsMapper;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.service.UserService;
-import com.harry.market.utils.Md5Utils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 //<<<<<<< HEAD
@@ -22,13 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 //>>>>>>> a83b967 (商品上传)
 //import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 //<<<<<<< HEAD
-import javax.annotation.Resource;
-
 
 
 @ResponseBody
@@ -116,7 +109,7 @@ public class UserController {
     //获取用户信息(头像、昵称、联系方式等)
     @GetMapping("/get")
     public Result getUserInfo(@RequestParam String id) {
-        UserInfoDTO userInfo = userService.getUserInfoById(id);
+        UserInfoVO userInfo = userService.getUserInfoById(id);
         return Result.success(userInfo);
     }
 

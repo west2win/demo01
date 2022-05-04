@@ -14,7 +14,7 @@ public class Order {
 
     @TableId(value="id",type = IdType.ASSIGN_ID)
     private Long id;
-    private String item;
+    private Long item_id;
     private Long seller_id;
     private Integer number;
     private BigDecimal per_price;

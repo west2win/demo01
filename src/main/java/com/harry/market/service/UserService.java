@@ -1,28 +1,22 @@
 package com.harry.market.service;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.harry.market.common.Constants;
 import com.harry.market.controller.UserController;
 import com.harry.market.controller.dto.UserDTO;
-import com.harry.market.controller.dto.UserInfoDTO;
+import com.harry.market.controller.dto.UserInfoVO;
 import com.harry.market.entity.User;
 import com.harry.market.entity.UserDetails;
 import com.harry.market.exception.ServiceException;
 import com.harry.market.mapper.UserDetailsMapper;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.utils.ExcelUtill;
-import com.harry.market.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -135,9 +129,9 @@ public class UserService extends ServiceImpl<UserMapper,User> {
 //        return userDetailsMapper.getUserInfo(username);
 //    }
 
-    public UserInfoDTO getUserInfoById(String id) {
+    public UserInfoVO getUserInfoById(String id) {
         User one;
-        UserInfoDTO info;
+        UserInfoVO info;
         try{
             info = userDetailsMapper.getUserInfo(id);
         }catch(Exception e){

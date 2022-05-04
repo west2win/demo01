@@ -27,13 +27,13 @@ public interface GoodsMapper extends BaseMapper<Item> {
     List<ItemDTO> selectNewest(Integer pageNum, Integer pageSize);
 
     @Select("select  * from item where id = #{id}")
-    List<Item> findGoods(BigInteger id);
+    List<Item> findGoods(Long id);
 
     @Select ("select * from item where name like \"%\"#{nname}\"%\"")
     List<Item> findGoodsName(String nname);
 
     @Select ("Update item Set is_audit = 1 Where id = #{id}")
-    List<Item> passAudit(BigInteger id);
+    List<Item> passAudit(Long id);
 
     @Select("select `seller_id` from item where id = #{id}")
     List<BigInteger> getSellerId(BigInteger id);

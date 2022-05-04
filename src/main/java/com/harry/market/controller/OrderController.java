@@ -1,9 +1,11 @@
 package com.harry.market.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.controller.dto.OrderDTO;
+import com.harry.market.controller.dto.OrderVO;
 import com.harry.market.entity.Item;
 import com.harry.market.entity.Order;
 import com.harry.market.entity.UserOrder;
@@ -11,6 +13,7 @@ import com.harry.market.mapper.GoodsMapper;
 import com.harry.market.mapper.OrderMapper;
 import com.harry.market.mapper.UserOrderMapper;
 import com.harry.market.service.GoodService;
+import com.harry.market.service.OrderService;
 import com.harry.market.service.UserService;
 import org.mockito.internal.matchers.Or;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,9 @@ public class OrderController {
     @Autowired
     private GoodService goodService;
 
+    @Autowired
+    private OrderService orderService;
+
 //    //交易成功
 //    @PostMapping("/deal")
 //    public Result deal(@RequestParam BigInteger goodsId, @RequestParam Integer dealNumber){
@@ -73,7 +79,6 @@ public class OrderController {
             if (item == null) {
                 return Result.error(Constants.CODE_400,"不存在该商品或该商品未经审核");
             }
-            String goodName = item.getName();
             Long seller_id = item.getSeller_id();
             BigDecimal perPrice = item.getPrice();
 
@@ -86,17 +91,14 @@ public class OrderController {
 //            } else {
 //                username = principal.toString();
 //            }
-
+            userOrder.setId(IdWorker.getId(userOrder));
             userOrder.setUser_id(buyer_id);
             userOrder.setItem_id(good_id);
-            System.out.println("==========");
-            System.out.println(userOrder);
-            System.out.println("==========");
 
             userOrderMapper.insert(userOrder);
 
-
-            order.setItem(goodName);
+            order.setId(userOrder.getId());
+            order.setItem_id(good_id);
             order.setSeller_id(seller_id);
             order.setNumber(number);
             order.setPer_price(perPrice);
@@ -108,6 +110,16 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/Info/{id}")
+    public Result getInfoById(@PathVariable Long id) {
+        List<OrderVO> info = orderService.getInfoByUserId(id);
+        if (info!=null) {
+            return Result.success(info);
+        } else {
+            return Result.error(Constants.CODE_400,"未查询到任何订单");
+        }
+
+    }
 
 
 }

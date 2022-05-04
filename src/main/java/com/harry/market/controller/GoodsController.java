@@ -127,7 +127,7 @@ public class GoodsController {
 
     //审核通过商品
     @GetMapping("/audit/{id}")
-    public Result passAudit(@PathVariable BigInteger id) {
+    public Result passAudit(@PathVariable Long id) {
         return Result.success(goodsMapper.passAudit(id));
         }
 
@@ -164,7 +164,7 @@ public class GoodsController {
 
     //商品详情查询
     @GetMapping("/detail/{id}")
-    public Result detail(@PathVariable BigInteger id) {
+    public Result detail(@PathVariable Long id) {
         return Result.success(goodsMapper.findGoods(id));
     }
 
