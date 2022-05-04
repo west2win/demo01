@@ -1,6 +1,8 @@
 package com.harry.market.controller;
 
+import cn.hutool.Hutool;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
@@ -113,8 +115,8 @@ public class OrderController {
     @GetMapping("/Info/{id}")
     public Result getInfoById(@PathVariable Long id) {
         List<OrderVO> info = orderService.getInfoByUserId(id);
-        if (info!=null) {
-            return Result.success(info);
+        if (!info.isEmpty()) {
+            return Result.success(info,orderService.getOrderNumByUserId(id).toString());
         } else {
             return Result.error(Constants.CODE_400,"未查询到任何订单");
         }
