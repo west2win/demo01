@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.harry.market.common.Constants;
 import com.harry.market.controller.UserController;
-import com.harry.market.controller.dto.UserDTO;
-import com.harry.market.controller.dto.UserInfoVO;
+import com.harry.market.controller.dto.*;
+import com.harry.market.controller.vo.UserInfoVO;
 import com.harry.market.entity.User;
 import com.harry.market.entity.UserDetails;
 import com.harry.market.exception.ServiceException;
@@ -106,11 +106,12 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         ExcelUtill data = new ExcelUtill("D:\\Code\\project\\coporation\\data.xlsx", "data");
         List<UserDetails> users = data.getExcelUser(row, num);
         for (UserDetails user : users) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUsername(user.getUsername());
-            userDTO.setPassword("123456");
-            userController.register(userDTO);
-            user.setId(userService.getUserId(userDTO.getUsername()));
+            UserRegDTO userRegDTO = new UserRegDTO();
+            userRegDTO.setUsername(user.getUsername());
+            userRegDTO.setPassword("123456");
+            userRegDTO.setEmail(user.getEmail());
+            userController.register(userRegDTO);
+            user.setId(userService.getUserId(userRegDTO.getUsername()));
             userDetailsMapper.updateById(user);
         }
 
@@ -129,7 +130,7 @@ public class UserService extends ServiceImpl<UserMapper,User> {
 //        return userDetailsMapper.getUserInfo(username);
 //    }
 
-    public UserInfoVO getUserInfoById(String id) {
+    public UserInfoVO getUserInfoById(Long id) {
         User one;
         UserInfoVO info;
         try{
@@ -139,6 +140,35 @@ public class UserService extends ServiceImpl<UserMapper,User> {
             throw new ServiceException(Constants.CODE_500,"系统错误");
         }
         return info;
+    }
+
+    public void changePassword(ChgPwdDTO chgPwdDTO) {
+        String password = chgPwdDTO.getNewPassword();
+        password = encoder.encode(password);
+        chgPwdDTO.setNewPassword(password);
+        User user = new User();
+        user.setId(chgPwdDTO.getUserId());
+        user.setPassword(chgPwdDTO.getNewPassword());
+        userService.updateById(user);
+    }
+
+    public User getUserById(Long id) {
+        return userMapper.selectById(id);
+    }
+
+    public void changeUserInfo(ChgUserInfoDTO chgUserInfoDTO) {
+        UserDetails userDetails = new UserDetails();
+        userDetails.setId(chgUserInfoDTO.getUserId());
+        userDetails.setRealname(chgUserInfoDTO.getRealname());
+        userDetails.setNickname(chgUserInfoDTO.getNickname());
+        userDetails.setGender(chgUserInfoDTO.getGender());
+        userDetails.setAge(chgUserInfoDTO.getAge());
+        userDetails.setTel(chgUserInfoDTO.getTel());
+        userDetails.setEmail(chgUserInfoDTO.getEmail());
+        userDetails.setQq(chgUserInfoDTO.getQq());
+        userDetails.setIntroduction(chgUserInfoDTO.getIntro());
+
+        userDetailsMapper.updateById(userDetails);
     }
 
 }

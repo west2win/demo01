@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ExcelUtill {
     private XSSFSheet sheet;
@@ -59,6 +60,7 @@ public class ExcelUtill {
             Integer gender;
             Integer age;
             String tel;
+            String email;
             Integer qq;
             String introduction;
 
@@ -75,7 +77,9 @@ public class ExcelUtill {
             }
 
             age = Integer.valueOf(getExcelDateByIndex(i,40).substring(0,2));
+            email = getExcelDateByIndex(i,10);
             tel = getExcelDateByIndex(i,6).replaceAll(" ","").substring(0,11);
+            qq = (int)(Math.random() * (400000000 -100000000)) + 100000000;
             introduction = getExcelDateByIndex(i,14);
 
             userDetails.setUsername(username);
@@ -84,7 +88,9 @@ public class ExcelUtill {
             userDetails.setHead(head);
             userDetails.setGender(gender);
             userDetails.setAge(age);
+            userDetails.setEmail(email);
             userDetails.setTel(tel);
+            userDetails.setQq(qq);
             userDetails.setIntroduction(introduction);
 
             users.add(userDetails);

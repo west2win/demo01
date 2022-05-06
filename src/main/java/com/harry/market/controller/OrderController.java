@@ -1,13 +1,10 @@
 package com.harry.market.controller;
 
-import cn.hutool.Hutool;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.controller.dto.OrderDTO;
-import com.harry.market.controller.dto.OrderVO;
+import com.harry.market.controller.vo.OrderVO;
 import com.harry.market.entity.Item;
 import com.harry.market.entity.Order;
 import com.harry.market.entity.UserOrder;
@@ -17,15 +14,11 @@ import com.harry.market.mapper.UserOrderMapper;
 import com.harry.market.service.GoodService;
 import com.harry.market.service.OrderService;
 import com.harry.market.service.UserService;
-import org.mockito.internal.matchers.Or;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 
 

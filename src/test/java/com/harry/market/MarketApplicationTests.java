@@ -33,6 +33,8 @@ class MarketApplicationTests {
 
     @Test
     void contextLoads() {
+        int i = (int) (Math.random() * (400000000 - 100000000)) + 100000000;
+        System.out.println(i);
     }
 
     @Test

@@ -17,6 +17,7 @@ public class UserDetails {
     private Integer gender;
     private Integer age;
     private String tel;
+    private String email;
     private Integer qq;
     private String introduction;
     @TableLogic

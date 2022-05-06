@@ -1,4 +1,4 @@
-package com.harry.market.controller.dto;
+package com.harry.market.controller.vo;
 
 import lombok.Data;
 

@@ -1,14 +1,12 @@
 package com.harry.market.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.harry.market.controller.dto.OrderVO;
+import com.harry.market.controller.vo.OrderVO;
 import com.harry.market.entity.Item;
 import com.harry.market.entity.Order;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Mapper

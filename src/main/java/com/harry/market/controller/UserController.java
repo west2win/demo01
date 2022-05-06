@@ -1,10 +1,11 @@
 package com.harry.market.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
-import com.harry.market.controller.dto.UserDTO;
-import com.harry.market.controller.dto.UserInfoVO;
+import com.harry.market.controller.dto.*;
+import com.harry.market.controller.vo.UserInfoVO;
 import com.harry.market.entity.User;
 import com.harry.market.entity.UserDetails;
 import com.harry.market.mapper.UserDetailsMapper;
@@ -59,38 +60,36 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Result register(@RequestBody UserDTO userDTO) {
-        String username = userDTO.getUsername();
+    public Result register(@RequestBody UserRegDTO userRegDTO) {
+        String username = userRegDTO.getUsername();
 //        String password = Md5Utils.code(userDTO.getPassword());
 
         // 改成强hash加密
-        String password = userDTO.getPassword();
+        String password = userRegDTO.getPassword();
         password = encoder.encode(password);
+        userRegDTO.setPassword(password);
 
-        userDTO.setPassword(password);
+        String email = userRegDTO.getEmail();
+
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
             return Result.error(Constants.CODE_400, "参数错误");
         }else if(userMapper.sameName(username).size()!=0){
             return Result.error(Constants.CODE_400, "此用户名已被注册");
         }else {
             User saveUser = new User();
-//            Date date = new Date();
-//            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Long id = IdWorker.getId(saveUser);
 
             saveUser.setUsername(username);
             saveUser.setPassword(password);
             saveUser.setPerm("user");
-
-            // Mybatis-plus 自动填充
-//            saveUser.setIs_deleted(0);
-//            saveUser.setGmt_create(Timestamp.valueOf(simpleDate.format(date)));
-//            saveUser.setGmt_modified(Timestamp.valueOf(simpleDate.format(date)));
+            saveUser.setId(id);
 
             userMapper.insert(saveUser);
 
             UserDetails ud = new UserDetails();
-            ud.setId(userService.getUserId(saveUser.getUsername()));
+            ud.setId(id);
             ud.setUsername(saveUser.getUsername());
+            ud.setEmail(email);
             userDetailsMapper.insert(ud);
 
             return Result.success();
@@ -108,9 +107,21 @@ public class UserController {
 
     //获取用户信息(头像、昵称、联系方式等)
     @GetMapping("/get")
-    public Result getUserInfo(@RequestParam String id) {
+    public Result getUserInfo(@RequestParam Long id) {
         UserInfoVO userInfo = userService.getUserInfoById(id);
         return Result.success(userInfo);
+    }
+
+    @PostMapping("/chgPwd")
+    public Result changePassword(@RequestBody ChgPwdDTO chgPwdDTO) {
+        userService.changePassword(chgPwdDTO);
+        return Result.success(userService.getUserById(chgPwdDTO.getUserId()));
+    }
+
+    @PostMapping("/chgUInfo")
+    public Result changeUserInfo(@RequestBody ChgUserInfoDTO chgUserInfoDTO) {
+        userService.changeUserInfo(chgUserInfoDTO);
+        return Result.success(userService.getUserInfoById(chgUserInfoDTO.getUserId()));
     }
 
 }

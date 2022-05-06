@@ -2,7 +2,9 @@ package com.harry.market.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.harry.market.controller.dto.ItemDTO;
 import com.harry.market.entity.Item;
 import com.harry.market.entity.Order;
 import com.harry.market.mapper.GoodsMapper;
@@ -38,6 +40,28 @@ public class GoodService extends ServiceImpl<GoodsMapper, Item> {
         }
     }
 
+    public Long uploadItem(ItemDTO itemDTO) {
+        Item saveItem = new Item();
+        saveItem.setId(IdWorker.getId(saveItem));
+        saveItem.setKind(itemDTO.getKind());
+        saveItem.setName(itemDTO.getName());
+        saveItem.setIntroduction(itemDTO.getIntro());
+        saveItem.setPrice(itemDTO.getPrice());
+        saveItem.setNumber(itemDTO.getNumber());
+        goodsMapper.insert(saveItem);
+        return saveItem.getId();
+    }
+
+    public void chgItemInfo(Long itemId,ItemDTO itemDTO) {
+        Item item = new Item();
+        item.setId(itemId);
+        item.setKind(itemDTO.getKind());
+        item.setName(itemDTO.getName());
+        item.setIntroduction(itemDTO.getIntro());
+        item.setPrice(itemDTO.getPrice());
+        item.setNumber(itemDTO.getNumber());
+        goodsMapper.updateById(item);
+    }
 
 
 }

@@ -1,12 +1,11 @@
 package com.harry.market.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.harry.market.controller.dto.ItemDTO;
+import com.harry.market.controller.vo.ItemVO;
 import com.harry.market.entity.Item;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -18,13 +17,13 @@ public interface GoodsMapper extends BaseMapper<Item> {
 
 //    @Select("select  id,name,introduction,photo,price from item limit #{pageNum},#{pageSize}")
     @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id order by rand() limit #{pageNum},#{pageSize}")
-    List<ItemDTO> selectDefault(Integer pageNum, Integer pageSize);
+    List<ItemVO> selectDefault(Integer pageNum, Integer pageSize);
 
     @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id order by price ${order} limit #{pageNum},#{pageSize}")
-    List<ItemDTO> selectPage(String order,Integer pageNum, Integer pageSize);
+    List<ItemVO> selectPage(String order, Integer pageNum, Integer pageSize);
 
     @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id order by gmt_modified desc limit #{pageNum},#{pageSize}")
-    List<ItemDTO> selectNewest(Integer pageNum, Integer pageSize);
+    List<ItemVO> selectNewest(Integer pageNum, Integer pageSize);
 
     @Select("select  * from item where id = #{id}")
     List<Item> findGoods(Long id);
@@ -39,16 +38,16 @@ public interface GoodsMapper extends BaseMapper<Item> {
     List<BigInteger> getSellerId(BigInteger id);
 
     @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where kind = #{kind} order by price ${order} limit #{pageNum},#{pageSize}")
-    List<ItemDTO> selectKind(String order,String kind,Integer pageNum, Integer pageSize);
+    List<ItemVO> selectKind(String order, String kind, Integer pageNum, Integer pageSize);
 
     @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where kind = #{kind} order by gmt_modified asc limit #{pageNum},#{pageSize}")
-    List<ItemDTO> selectKindNewest(String kind,Integer pageNum, Integer pageSize);
+    List<ItemVO> selectKindNewest(String kind, Integer pageNum, Integer pageSize);
 
     @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where kind = #{kind} order by price asc,number asc,gmt_modified desc limit #{pageNum},#{pageSize}")
-    List<ItemDTO> selectKindDefault(String kind,Integer pageNum, Integer pageSize);
+    List<ItemVO> selectKindDefault(String kind, Integer pageNum, Integer pageSize);
 
     @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where `name` like \"%${nname}%\"")
-    List<ItemDTO> search(String nname);
+    List<ItemVO> search(String nname);
 
     @Select("select COUNT(*) from item")
     Integer getTotalNum();

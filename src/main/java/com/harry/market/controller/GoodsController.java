@@ -5,8 +5,10 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
+import com.harry.market.controller.dto.ItemDTO;
 import com.harry.market.entity.Item;
 import com.harry.market.mapper.GoodsMapper;
+import com.harry.market.service.GoodService;
 import com.harry.market.service.UploadPicService;
 import com.harry.market.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,6 +37,9 @@ public class GoodsController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private GoodService goodService;
+
     @Resource
     private GoodsMapper goodsMapper;
 
@@ -45,74 +50,74 @@ public class GoodsController {
     UploadPicService uploadPicService;
     String folder = "item_photo/";
 
-    @PostMapping("/upload")
-    public Result upload(@RequestParam Long id,@RequestParam String name, @RequestParam BigDecimal price, @RequestParam Integer number, @RequestParam MultipartFile intro, @RequestParam MultipartFile photo) throws IOException {
-
-        String originalIntroName = intro.getOriginalFilename();
-        String introType = FileUtil.extName(originalIntroName);
-
-        String originalPhotoName = photo.getOriginalFilename();
-        String photoType = FileUtil.extName(originalPhotoName);
-
-        //先存储到磁盘
-        File uploadParentFile = new File(fileUploadPath);
-
-        //判断配置文件的目录是否存在，若不存在则创建一个新的文件目录
-        if (!uploadParentFile.exists()) {
-            uploadParentFile.mkdirs();
-        }
-
-        //定义一个文件唯一的标识码
-        String introUuid = IdUtil.fastSimpleUUID();
-        String introUUID = introUuid + StrUtil.DOT + introType;
-        File uploadIntro = new File(fileUploadPath + introUUID);
-
-        String photoUuid = IdUtil.fastSimpleUUID();
-        String photoUUID = photoUuid + StrUtil.DOT + photoType;
-        File uploadPhoto = new File(fileUploadPath + photoUUID);
-
-        //把获取后的文件存储到磁盘目录
-        intro.transferTo(uploadIntro);
-        String introUrl = "http://484470xs49.qicp.vip/intro/" + introUUID;
-
-//        photo.transferTo(uploadPhoto);
-//        String photoURL = "http://484470xs49.qicp.vip/photo/" + photoUUID;
-
-        // 改成上传AliOss对象存储了
-        String photoURL = uploadPicService.uploadPic(photo,photoUUID,folder);
-
-        Item saveGoods = new Item();
-        Date date = new Date();
-
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-//        // 从SecurityContextHolder中获取当前用户id(也就是上传者/卖家的id)
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String username;
-//        if (principal instanceof UserDetails) {
-//            username = ((UserDetails)principal).getUsername();
-//        } else {
-//            username = principal.toString();
+//    @PostMapping("/upload")
+//    public Result upload(@RequestParam Long id,@RequestParam String name, @RequestParam BigDecimal price, @RequestParam Integer number, @RequestParam MultipartFile intro, @RequestParam MultipartFile photo) throws IOException {
+//
+//        String originalIntroName = intro.getOriginalFilename();
+//        String introType = FileUtil.extName(originalIntroName);
+//
+//        String originalPhotoName = photo.getOriginalFilename();
+//        String photoType = FileUtil.extName(originalPhotoName);
+//
+//        //先存储到磁盘
+//        File uploadParentFile = new File(fileUploadPath);
+//
+//        //判断配置文件的目录是否存在，若不存在则创建一个新的文件目录
+//        if (!uploadParentFile.exists()) {
+//            uploadParentFile.mkdirs();
 //        }
-//        Long seller_id = userService.getUserId(username);
-        Long seller_id = id;
-
-        saveGoods.setName(name);
-        saveGoods.setIntroduction(introUrl);
-        saveGoods.setPhoto(photoURL);
-        saveGoods.setPrice(price);
-        saveGoods.setNumber(number);
-        saveGoods.setSeller_id(seller_id);
-        saveGoods.set_audit(false);
-
-        // mybatis-plus自动填充
-//        saveGoods.set_deleted(false);
-//        saveGoods.setGmt_create(Timestamp.valueOf(simpleDate.format(date)));
-//        saveGoods.setGmt_modified(Timestamp.valueOf(simpleDate.format(date)));
-
-        goodsMapper.insert(saveGoods);
-        return Result.success();
-    }
+//
+//        //定义一个文件唯一的标识码
+//        String introUuid = IdUtil.fastSimpleUUID();
+//        String introUUID = introUuid + StrUtil.DOT + introType;
+//        File uploadIntro = new File(fileUploadPath + introUUID);
+//
+//        String photoUuid = IdUtil.fastSimpleUUID();
+//        String photoUUID = photoUuid + StrUtil.DOT + photoType;
+//        File uploadPhoto = new File(fileUploadPath + photoUUID);
+//
+//        //把获取后的文件存储到磁盘目录
+//        intro.transferTo(uploadIntro);
+//        String introUrl = "http://484470xs49.qicp.vip/intro/" + introUUID;
+//
+////        photo.transferTo(uploadPhoto);
+////        String photoURL = "http://484470xs49.qicp.vip/photo/" + photoUUID;
+//
+//        // 改成上传AliOss对象存储了
+//        String photoURL = uploadPicService.uploadPic(photo,photoUUID,folder);
+//
+//        Item saveGoods = new Item();
+//        Date date = new Date();
+//
+//        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+////        // 从SecurityContextHolder中获取当前用户id(也就是上传者/卖家的id)
+////        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+////        String username;
+////        if (principal instanceof UserDetails) {
+////            username = ((UserDetails)principal).getUsername();
+////        } else {
+////            username = principal.toString();
+////        }
+////        Long seller_id = userService.getUserId(username);
+//        Long seller_id = id;
+//
+//        saveGoods.setName(name);
+//        saveGoods.setIntroduction(introUrl);
+//        saveGoods.setPhoto(photoURL);
+//        saveGoods.setPrice(price);
+//        saveGoods.setNumber(number);
+//        saveGoods.setSeller_id(seller_id);
+//        saveGoods.set_audit(false);
+//
+//        // mybatis-plus自动填充
+////        saveGoods.set_deleted(false);
+////        saveGoods.setGmt_create(Timestamp.valueOf(simpleDate.format(date)));
+////        saveGoods.setGmt_modified(Timestamp.valueOf(simpleDate.format(date)));
+//
+//        goodsMapper.insert(saveGoods);
+//        return Result.success();
+//    }
 
 
     //查看全部待审核商品
@@ -351,9 +356,16 @@ public class GoodsController {
     }
 
 
-//    @PostMapping("/deal")
-//    public Result deal(@RequestParam("购买者id") String buyId,@RequestParam("商品id") BigInteger goodId,@RequestParam("购买数量") int buyNum) {
-//        TODO
-//    }
+    @PostMapping("/upload")
+    public Result uploadNewItem(@RequestBody ItemDTO itemDTO) {
+        Long itemId = goodService.uploadItem(itemDTO);
+        return Result.success(goodService.getGood(itemId));
+    }
+
+    @PostMapping("/chgItemInfo")
+    public Result chgItemInfo(@RequestParam Long itemId,@RequestBody ItemDTO itemDTO) {
+        goodService.chgItemInfo(itemId,itemDTO);
+        return Result.success(goodService.getGood(itemId));
+    }
 
 }
