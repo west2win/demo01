@@ -5,8 +5,10 @@ import com.harry.market.entity.Item;
 import com.harry.market.entity.UserDetails;
 import com.harry.market.service.GoodService;
 
+import com.harry.market.service.MailService;
 import com.harry.market.service.UserService;
 import com.harry.market.utils.ExcelUtill;
+import com.harry.market.utils.VerCodeGenerateUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,7 +16,11 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -77,6 +83,19 @@ class MarketApplicationTests {
     @Test
     void excelInsert() {
         userService.insertExcelUser(1,15);
+    }
+
+    @Autowired
+    private JavaMailSenderImpl mailSender;
+    @Autowired
+    private MailService mailService;
+
+    @Test
+    void mailTest() throws MessagingException {
+        String code = VerCodeGenerateUtil.getSecurityCode();
+        System.out.println(code);
+        //调用service方法，通过邮箱服务进行发送
+        boolean isSend = mailService.sendMail("3146476973@qq.com", code);
     }
 
 }

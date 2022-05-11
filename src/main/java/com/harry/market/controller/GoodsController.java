@@ -44,8 +44,8 @@ public class GoodsController {
     @Resource
     private GoodsMapper goodsMapper;
 
-    @Value("${files.upload.path}")
-    private String fileUploadPath;
+//    @Value("${files.upload.path}")
+//    private String fileUploadPath;
 
     @Autowired
     UploadPicService uploadPicService;

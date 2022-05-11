@@ -2,6 +2,23 @@ server:
   port: 9091
 
 spring:
+  redis:
+    host: 47.113.218.23
+    port: 6379
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: lear_yd@qq.com
+    password: gaedwcddqujebijf
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  #    properties:
+#      mail.stmp.auth: true
+#      mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/market?serverTimezone=GMT%2b8

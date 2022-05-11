@@ -1,6 +1,7 @@
 package com.harry.market.service;
 
 import cn.hutool.log.Log;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.harry.market.common.Constants;
@@ -19,13 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
 @Service
 public class UserService extends ServiceImpl<UserMapper,User> {
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
     @Autowired
@@ -182,6 +184,13 @@ public class UserService extends ServiceImpl<UserMapper,User> {
 
         userDetailsMapper.updateById(userDetails);
         buyerMsgMapper.updateById(buyerMsg);
+    }
+
+    public List<UserDetails> getUserbyEmail(String email) {
+        QueryWrapper<UserDetails> wrapper = new QueryWrapper<>();
+        wrapper.eq("email",email);
+        return userDetailsMapper.selectList(wrapper);
+
     }
 
 }
