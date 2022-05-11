@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.reflect.ImmutableTypeToInstanceMap;
+import com.harry.market.common.Result;
 import com.harry.market.entity.Item;
 import com.harry.market.entity.UserDetails;
 import com.harry.market.mapper.GoodsMapper;
@@ -58,7 +59,7 @@ public class PhotoController {
     }
 
     @PostMapping("/upHead")
-    public void uploadUserHead(@RequestParam Long userId,@RequestParam MultipartFile photo) throws IOException {
+    public Result uploadUserHead(@RequestParam Long userId, @RequestParam MultipartFile photo) throws IOException {
         String folder = "item_photo/";
         String originalPhotoName = photo.getOriginalFilename();
         String photoType = FileUtil.extName(originalPhotoName);
@@ -69,11 +70,12 @@ public class PhotoController {
         userDetails.setId(userId);
         userDetails.setHead(photoURL);
         userDetailsMapper.updateById(userDetails);
+        return Result.success(photoURL);
     }
 
     @PostMapping("/upPhoto")
-    public void uploadItemPhoto(@RequestParam Long itemId,@RequestParam MultipartFile photo) throws IOException {
-        String folder = "item_photo/";
+    public Result uploadItemPhoto(@RequestParam Long itemId,@RequestParam MultipartFile photo) throws IOException {
+        String folder = "user_head/";
         String originalPhotoName = photo.getOriginalFilename();
         String photoType = FileUtil.extName(originalPhotoName);
         String photoUuid = IdUtil.fastSimpleUUID();
@@ -83,6 +85,7 @@ public class PhotoController {
         item.setId(itemId);
         item.setPhoto(photoURL);
         goodsMapper.updateById(item);
+        return Result.success(photoURL);
     }
 
 }

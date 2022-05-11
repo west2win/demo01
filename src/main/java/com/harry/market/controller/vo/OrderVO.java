@@ -1,11 +1,13 @@
 package com.harry.market.controller.vo;
 
+import com.google.common.primitives.UnsignedLong;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
 public class OrderVO {
+    private String orderId;
     private String buyerHead;
     private String buyerName;
     private String sellerHead;

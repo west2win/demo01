@@ -62,6 +62,7 @@ public class ExcelUtill {
             String tel;
             String email;
             Integer qq;
+            String address;
             String introduction;
 
             username = getExcelDateByIndex(i,3);
@@ -79,6 +80,7 @@ public class ExcelUtill {
             age = Integer.valueOf(getExcelDateByIndex(i,40).substring(0,2));
             email = getExcelDateByIndex(i,10);
             tel = getExcelDateByIndex(i,6).replaceAll(" ","").substring(0,11);
+            address = getExcelDateByIndex(i,8);
             qq = (int)(Math.random() * (400000000 -100000000)) + 100000000;
             introduction = getExcelDateByIndex(i,14);
 
@@ -91,6 +93,7 @@ public class ExcelUtill {
             userDetails.setEmail(email);
             userDetails.setTel(tel);
             userDetails.setQq(qq);
+            userDetails.setAddress(address);
             userDetails.setIntroduction(introduction);
 
             users.add(userDetails);

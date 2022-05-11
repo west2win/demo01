@@ -15,7 +15,7 @@ public class UserOrder {
 
     @TableId(value="id",type = IdType.ASSIGN_ID)
     private Long id;
-    private Long user_id;
+    private Long buyer_id;
     private Long item_id;
     @TableLogic
     private boolean is_deleted;

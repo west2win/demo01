@@ -6,8 +6,10 @@ import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.controller.dto.*;
 import com.harry.market.controller.vo.UserInfoVO;
+import com.harry.market.entity.BuyerMsg;
 import com.harry.market.entity.User;
 import com.harry.market.entity.UserDetails;
+import com.harry.market.mapper.BuyerMsgMapper;
 import com.harry.market.mapper.UserDetailsMapper;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.service.UserService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 //<<<<<<< HEAD
 //=======
 import javax.annotation.Resource;
+import java.util.List;
 //>>>>>>> a83b967 (商品上传)
 //import java.sql.Timestamp;
 
@@ -43,11 +46,21 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    @Autowired
+    private BuyerMsgMapper buyerMsgMapper;
+
     @PostMapping("/login")
     public Result login(@RequestBody UserDTO userDTO) {
-        String username = userDTO.getUsername();
+//        String username = userDTO.getUsername();
+        String email = userDTO.getEmail();
         String password = userDTO.getPassword();
-        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
+        List<User> us = userMapper.sameEmail(email);
+        if (us.isEmpty()) {
+            return Result.error(Constants.CODE_400,"该邮箱未被注册");
+        }
+        String username = us.get(0).getUsername();
+        userDTO.setUsername(username);
+        if (StrUtil.isBlank(email) || StrUtil.isBlank(password) || StrUtil.isBlank(username)) {
             return Result.error(Constants.CODE_400, "参数错误");
         }else if(userMapper.sameName(username).get(0).getPerm().equals("管理员")){
             return Result.adminSuccess();
@@ -71,10 +84,12 @@ public class UserController {
 
         String email = userRegDTO.getEmail();
 
-        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
+        if (StrUtil.isBlank(email) || StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
             return Result.error(Constants.CODE_400, "参数错误");
         }else if(userMapper.sameName(username).size()!=0){
             return Result.error(Constants.CODE_400, "此用户名已被注册");
+        }else if(userMapper.sameEmail(email).size()!=0) {
+            return Result.error(Constants.CODE_400,"此邮箱已被注册");
         }else {
             User saveUser = new User();
             Long id = IdWorker.getId(saveUser);
@@ -92,7 +107,14 @@ public class UserController {
             ud.setEmail(email);
             userDetailsMapper.insert(ud);
 
-            return Result.success();
+            BuyerMsg buyerMsg = new BuyerMsg();
+            buyerMsg.setId(id);
+            buyerMsgMapper.updateById(buyerMsg);
+
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUsername(saveUser.getUsername());
+            userDTO.setPassword(saveUser.getPassword());
+            return Result.success(userService.getUserInfo(userDTO));
         }
     }
 

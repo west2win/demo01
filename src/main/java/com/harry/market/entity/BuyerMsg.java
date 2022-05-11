@@ -2,25 +2,18 @@ package com.harry.market.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+
 import java.util.Date;
 
 @Data
-@TableName(value="user_details")
-public class UserDetails {
-
-    @TableId(value = "id",type = IdType.AUTO)
+@TableName(value="buyer_msg")
+public class BuyerMsg {
+    //用户id
     private Long id;
-    private String username;
-    private String realname;
+    private Long order_id;
     private String nickname;
-    private String head;
-    private Integer gender;
-    private Integer age;
     private String tel;
-    private String email;
-    private Integer qq;
     private String address;
-    private String introduction;
     @TableLogic
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)

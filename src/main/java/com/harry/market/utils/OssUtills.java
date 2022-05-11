@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * @author jack
- */
 @Slf4j
 @Component
 public class OssUtills {
@@ -52,7 +49,8 @@ public class OssUtills {
     }
 
     public static OSSClient getOSSClient() {
-        return new OSSClient(ENDPOINT, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
+        String endpoint="https://"+ENDPOINT;
+        return new OSSClient(endpoint, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
     }
     private static String getContentType(String fileName) {
         //文件的后缀名
@@ -119,7 +117,7 @@ public class OssUtills {
                 e.printStackTrace();
             }
         }
-        ossClient.shutdown();
+//        ossClient.shutdown();
     }
 
     //上传一张图片

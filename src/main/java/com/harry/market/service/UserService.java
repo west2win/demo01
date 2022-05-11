@@ -7,9 +7,11 @@ import com.harry.market.common.Constants;
 import com.harry.market.controller.UserController;
 import com.harry.market.controller.dto.*;
 import com.harry.market.controller.vo.UserInfoVO;
+import com.harry.market.entity.BuyerMsg;
 import com.harry.market.entity.User;
 import com.harry.market.entity.UserDetails;
 import com.harry.market.exception.ServiceException;
+import com.harry.market.mapper.BuyerMsgMapper;
 import com.harry.market.mapper.UserDetailsMapper;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.utils.ExcelUtill;
@@ -37,6 +39,9 @@ public class UserService extends ServiceImpl<UserMapper,User> {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    @Autowired
+    private BuyerMsgMapper buyerMsgMapper;
 
     private static final Log LOG = Log.get();
 
@@ -163,12 +168,20 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         userDetails.setNickname(chgUserInfoDTO.getNickname());
         userDetails.setGender(chgUserInfoDTO.getGender());
         userDetails.setAge(chgUserInfoDTO.getAge());
+        userDetails.setAddress(chgUserInfoDTO.getAddress());
         userDetails.setTel(chgUserInfoDTO.getTel());
         userDetails.setEmail(chgUserInfoDTO.getEmail());
         userDetails.setQq(chgUserInfoDTO.getQq());
         userDetails.setIntroduction(chgUserInfoDTO.getIntro());
 
+        BuyerMsg buyerMsg = new BuyerMsg();
+        buyerMsg.setId(chgUserInfoDTO.getUserId());
+        buyerMsg.setNickname(chgUserInfoDTO.getNickname());
+        buyerMsg.setTel(chgUserInfoDTO.getTel());
+        buyerMsg.setAddress(chgUserInfoDTO.getAddress());
+
         userDetailsMapper.updateById(userDetails);
+        buyerMsgMapper.updateById(buyerMsg);
     }
 
 }

@@ -24,6 +24,7 @@ public class AliOssConfig {
 
     @Bean
     public OSSClient ossClient() {
+        endpoint = "https://"+endpoint;
         return new OSSClient(endpoint, accessKeyId, accessKeySecret);
     }
 }

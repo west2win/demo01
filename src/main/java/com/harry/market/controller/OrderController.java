@@ -5,15 +5,12 @@ import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.controller.dto.OrderDTO;
 import com.harry.market.controller.vo.OrderVO;
-import com.harry.market.entity.Item;
-import com.harry.market.entity.Order;
-import com.harry.market.entity.UserOrder;
-import com.harry.market.mapper.GoodsMapper;
-import com.harry.market.mapper.OrderMapper;
-import com.harry.market.mapper.UserOrderMapper;
+import com.harry.market.entity.*;
+import com.harry.market.mapper.*;
 import com.harry.market.service.GoodService;
 import com.harry.market.service.OrderService;
 import com.harry.market.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +34,12 @@ public class OrderController {
     @Resource
     private UserOrderMapper userOrderMapper;
 
+    @Resource
+    private UserDetailsMapper userDetailsMapper;
+
+    @Resource
+    private BuyerMsgMapper buyerMsgMapper;
+
     @Autowired
     private UserService userService;
 
@@ -45,6 +48,7 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
 
 //    //交易成功
 //    @PostMapping("/deal")
@@ -58,6 +62,7 @@ public class OrderController {
 
     //创建订单
     @PostMapping("/newOrder")
+    @ApiOperation("新建订单")
     public Result newOrder(@RequestBody OrderDTO orderDTO) {
         Long buyer_id = orderDTO.getBuyer_id();
         Long good_id = orderDTO.getGood_id();
@@ -87,7 +92,7 @@ public class OrderController {
 //                username = principal.toString();
 //            }
             userOrder.setId(IdWorker.getId(userOrder));
-            userOrder.setUser_id(buyer_id);
+            userOrder.setBuyer_id(buyer_id);
             userOrder.setItem_id(good_id);
 
             userOrderMapper.insert(userOrder);
@@ -101,19 +106,42 @@ public class OrderController {
 
             orderMapper.insert(order);
 
-            return Result.success();
+            BuyerMsg buyerMsg = new BuyerMsg();
+            buyerMsg.setId(buyer_id);
+            buyerMsg.setOrder_id(userOrder.getId());
+
+            buyerMsgMapper.updateById(buyerMsg);
+
+            OrderVO orderVO = orderService.getOrdermsgByOrderId(userOrder.getId());
+            System.out.println(orderVO);
+
+            return Result.success(orderVO);
         }
     }
 
-    @GetMapping("/Info/{id}")
-    public Result getInfoById(@PathVariable Long id) {
-        List<OrderVO> info = orderService.getInfoByUserId(id);
+    @GetMapping("/itemInfo/{userId}")
+    @ApiOperation("获取某用户所有订单信息")
+    public Result getInfoById(@PathVariable Long userId) {
+        List<OrderVO> info = orderService.getInfoByUserId(userId);
         if (!info.isEmpty()) {
-            return Result.success(info,orderService.getOrderNumByUserId(id).toString());
+            return Result.success(info,orderService.getOrderNumByUserId(userId).toString());
         } else {
             return Result.error(Constants.CODE_400,"未查询到任何订单");
         }
+    }
 
+    @GetMapping("/buyerInfo/{userId}")
+    @ApiOperation("获取某订单买家地址信息等")
+    public Result getBuyerInfo(@PathVariable Long userId) {
+        BuyerMsg buyerMsg = orderService.getBuyerMsg(userId);
+        return Result.success(buyerMsg);
+    }
+
+    @PostMapping("/chgBuyerInfo")
+    @ApiOperation("修改卖家信息(地址电话等)")
+    public Result changeBuyerInfo(@RequestBody BuyerMsg buyerMsg) {
+        orderService.modifyBuyerMsg(buyerMsg);
+        return Result.success(buyerMsg);
     }
 
 

@@ -21,7 +21,7 @@ public class Item {
     private BigDecimal price;
     private Integer number;
     private Long seller_id;
-    private boolean is_audit;
+    private short is_audit;
     @TableLogic
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)

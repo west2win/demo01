@@ -19,8 +19,8 @@ import java.net.URLEncoder;
  * @create: 2022-03-19 19:33
  */
 
-@RestController
-@RequestMapping("/intro")
+//@RestController
+//@RequestMapping("/intro")
 public class IntroController {
 
     @Value("${files.upload.path}")

@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.controller.dto.ItemDTO;
+import com.harry.market.controller.vo.ItemVO;
 import com.harry.market.entity.Item;
 import com.harry.market.mapper.GoodsMapper;
 import com.harry.market.service.GoodService;
@@ -120,21 +121,15 @@ public class GoodsController {
 //    }
 
 
-    //查看全部待审核商品
-    @GetMapping("/findAudit")
-    public Result findAudit() {
-        if (goodsMapper.audit() != null) {
-            return Result.success(goodsMapper.audit());
-        }else{
-            return Result.error(Constants.CODE_400, "没有未审核的商品");
-        }
-    }
-
-    //审核通过商品
-    @GetMapping("/audit/{id}")
-    public Result passAudit(@PathVariable Long id) {
-        return Result.success(goodsMapper.passAudit(id));
-        }
+//    //查看全部待审核商品
+//    @GetMapping("/findAudit")
+//    public Result findAudit() {
+//        if (goodsMapper.audit() != null) {
+//            return Result.success(goodsMapper.audit());
+//        }else{
+//            return Result.error(Constants.CODE_400, "没有未审核的商品");
+//        }
+//    }
 
     //分页查询接口
     @ApiOperation("全种类分页")
@@ -359,13 +354,15 @@ public class GoodsController {
     @PostMapping("/upload")
     public Result uploadNewItem(@RequestBody ItemDTO itemDTO) {
         Long itemId = goodService.uploadItem(itemDTO);
-        return Result.success(goodService.getGood(itemId));
+        ItemVO itemVo = goodService.getItemById(itemId);
+        System.out.println(itemVo);
+        return Result.success(itemVo);
     }
 
     @PostMapping("/chgItemInfo")
-    public Result chgItemInfo(@RequestParam Long itemId,@RequestBody ItemDTO itemDTO) {
-        goodService.chgItemInfo(itemId,itemDTO);
-        return Result.success(goodService.getGood(itemId));
+    public Result chgItemInfo(@RequestBody ItemDTO itemDTO) {
+        goodService.chgItemInfo(itemDTO);
+        return Result.success(goodService.getGood(itemDTO.getItemId()));
     }
 
 }
