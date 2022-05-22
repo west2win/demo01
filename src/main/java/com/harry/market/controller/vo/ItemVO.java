@@ -18,4 +18,7 @@ public class ItemVO {
     private BigDecimal price;
     private String is_audit;
     private Date gmt_modified;
+    //格式化后的日期
+    private String sdf;
+    private String status;
 }

@@ -2,6 +2,7 @@ package com.harry.market.controller.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Required;
 
 @Data
 public class ChgUserInfoDTO {

@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class ChgPwdDTO {
-    private Long userId;
+//    private Long userId;
+    private String email;
+//    private String oldPassword;
     private String newPassword;
 }

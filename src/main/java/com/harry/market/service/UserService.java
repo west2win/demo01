@@ -7,20 +7,20 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.harry.market.common.Constants;
 import com.harry.market.controller.UserController;
 import com.harry.market.controller.dto.*;
+import com.harry.market.controller.vo.AuditUserVO;
 import com.harry.market.controller.vo.UserInfoVO;
-import com.harry.market.entity.BuyerMsg;
-import com.harry.market.entity.User;
-import com.harry.market.entity.UserDetails;
+import com.harry.market.controller.vo.UserVO;
+import com.harry.market.entity.*;
 import com.harry.market.exception.ServiceException;
-import com.harry.market.mapper.BuyerMsgMapper;
-import com.harry.market.mapper.UserDetailsMapper;
-import com.harry.market.mapper.UserMapper;
+import com.harry.market.mapper.*;
 import com.harry.market.utils.ExcelUtill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,8 +30,20 @@ public class UserService extends ServiceImpl<UserMapper,User> {
     @Resource
     private UserMapper userMapper;
 
-    @Autowired
+    @Resource
     private UserDetailsMapper userDetailsMapper;
+
+    @Resource
+    private BuyerMsgMapper buyerMsgMapper;
+
+    @Resource
+    private GoodsMapper goodsMapper;
+
+    @Resource
+    private UserOrderMapper userOrderMapper;
+
+    @Resource
+    private OrderMapper orderMapper;
 
     @Autowired
     private UserService userService;
@@ -42,8 +54,7 @@ public class UserService extends ServiceImpl<UserMapper,User> {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    @Autowired
-    private BuyerMsgMapper buyerMsgMapper;
+
 
     private static final Log LOG = Log.get();
 
@@ -58,7 +69,7 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         }
     }
 
-    public User getUserInfo(UserDTO userDTO){
+    public UserVO getUserInfo(UserDTO userDTO){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",userDTO.getUsername());
         queryWrapper.eq("password",userDTO.getPassword());
@@ -69,7 +80,15 @@ public class UserService extends ServiceImpl<UserMapper,User> {
             LOG.error(e);
             throw new ServiceException(Constants.CODE_500,"系统错误");
         }
-        return one;
+        UserVO userVO = new UserVO();
+        userVO.setId(one.getId().toString());
+        userVO.setUsername(one.getUsername());
+        userVO.setPassword(one.getPassword());
+        userVO.setPerm(one.getPerm());
+        userVO.set_deleted(one.is_deleted());
+        userVO.setGmt_modified(one.getGmt_modified());
+        userVO.setGmt_modified(one.getGmt_create());
+        return userVO;
     }
 
     private String getUserPwd(String loginName){
@@ -138,13 +157,14 @@ public class UserService extends ServiceImpl<UserMapper,User> {
 //    }
 
     public UserInfoVO getUserInfoById(Long id) {
-        User one;
         UserInfoVO info;
-        try{
-            info = userDetailsMapper.getUserInfo(id);
-        }catch(Exception e){
-            LOG.error(e);
-            throw new ServiceException(Constants.CODE_500,"系统错误");
+        info = userDetailsMapper.getUserInfo(id);
+        if ("0".equals(info.getGender())) {
+            info.setGender("不详");
+        } else if ("1".equals(info.getGender())) {
+            info.setGender("男");
+        } else if ("2".equals(info.getGender())) {
+            info.setGender("女");
         }
         return info;
     }
@@ -154,7 +174,7 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         password = encoder.encode(password);
         chgPwdDTO.setNewPassword(password);
         User user = new User();
-        user.setId(chgPwdDTO.getUserId());
+        user.setId(getUserbyEmail(chgPwdDTO.getEmail()).getId());
         user.setPassword(chgPwdDTO.getNewPassword());
         userService.updateById(user);
     }
@@ -186,11 +206,38 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         buyerMsgMapper.updateById(buyerMsg);
     }
 
-    public List<UserDetails> getUserbyEmail(String email) {
+    public UserDetails getUserbyEmail(String email) {
         QueryWrapper<UserDetails> wrapper = new QueryWrapper<>();
         wrapper.eq("email",email);
-        return userDetailsMapper.selectList(wrapper);
+        return userDetailsMapper.selectList(wrapper).get(0);
 
+    }
+
+    public void delUser(Long userId) {
+        QueryWrapper<Item> itemWrapper = new QueryWrapper<>();
+        itemWrapper.eq("seller_id",userId);
+        goodsMapper.delete(itemWrapper);
+
+        QueryWrapper<UserOrder> userOrderWrapper = new QueryWrapper<>();
+        userOrderWrapper.eq("buyer_id",userId);
+        List<UserOrder> userOrders = userOrderMapper.selectList(userOrderWrapper);
+        for (UserOrder uo : userOrders) {
+            orderMapper.deleteById(uo.getId());
+        }
+
+        userOrderMapper.delete(userOrderWrapper);
+        buyerMsgMapper.deleteById(userId);
+        userDetailsMapper.deleteById(userId);
+        userMapper.deleteById(userId);
+    }
+
+    public List<AuditUserVO> getUser(int pageNum,int pageSize,String sort,String order) {
+        List<AuditUserVO> allUser = userMapper.getAllUser(pageNum, pageSize, sort, order);
+        return allUser;
+    }
+
+    public Long getUserCount() {
+        return userMapper.getUserCount();
     }
 
 }

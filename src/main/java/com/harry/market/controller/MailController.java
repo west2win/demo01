@@ -46,10 +46,10 @@ public class MailController {
 //    public Result sendEmail(@PathVariable String email) {
     @GetMapping(value = "/send/{email}")
     public Result sendEmail(@PathVariable String email) {
-        List<UserDetails> user = userService.getUserbyEmail(email);
-        if (user.isEmpty()) {
-            return Result.error(Constants.CODE_401,"不存在该邮箱注册的用户");
-        }
+//        List<UserDetails> user = userService.getUserbyEmail(email);
+//        if (user.isEmpty()) {
+//            return Result.error(Constants.CODE_401,"不存在该邮箱注册的用户");
+//        }
 
 //        System.out.println(email);
 //        email = "362664609@qq.com";

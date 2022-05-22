@@ -20,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +27,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @ResponseBody
 @RestController
@@ -165,7 +165,7 @@ public class GoodsController {
     //商品详情查询
     @GetMapping("/detail/{id}")
     public Result detail(@PathVariable Long id) {
-        return Result.success(goodsMapper.findGoods(id));
+        return Result.success(goodService.findGoods(id));
     }
 
     //模糊查询商品名称
@@ -338,13 +338,47 @@ public class GoodsController {
         return result;
     }
 
+    @ApiOperation("不分类 获取全部 带排序 分页")
+    @GetMapping("/find/all")
+    public Result findAll(@RequestParam(defaultValue = "asc") String order,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Result result;
+        if ("asc".equals(order)||"desc".equals(order)) {
+            if (goodsMapper.selectAll(order, pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectAll(order, pageNum, pageSize),goodsMapper.getTotalNum().toString());
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("newest".equals(order)) {
+            if (goodsMapper.selectALlNewest(pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectALlNewest(pageNum, pageSize),goodsMapper.getTotalNum().toString());
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else if ("default".equals(order)) {
+            if (goodsMapper.selectAllDefault(pageNum, pageSize).size() != 0) {
+                result = Result.success(goodsMapper.selectAllDefault( pageNum, pageSize),goodsMapper.getTotalNum().toString());
+            } else {
+                result = Result.error(Constants.CODE_400, "没有查询到类似商品");
+            }
+        } else {
+            result = Result.error(Constants.CODE_400,"传参错了");
+        }
+
+        return result;
+    }
 
 
-    //模糊查询商品
+        //模糊查询商品
     @GetMapping("/search/{nname}")
-    public Result search(@PathVariable String nname) {
-        if (goodsMapper.search(nname).size() != 0) {
-            return Result.success(goodsMapper.search(nname));
+    @ApiOperation("模糊查询(0综合|1价格升序|2价格降序|3最新)")
+    public Result search(@PathVariable String nname,@RequestParam Integer sort,@RequestParam(defaultValue = "0") Integer pageNum,@RequestParam(defaultValue = "10") Integer pageSize) {
+        if (sort < 0 || sort>3) {
+            return Result.error(Constants.CODE_400,"参数错误");
+        }
+//        if (goodsMapper.search(nname).size() != 0) {
+        List<Item> search = goodService.search(nname, sort, pageNum, pageSize);
+        if (search.size() != 0) {
+            return Result.success(search);
         } else {
             return Result.error(Constants.CODE_400, "没有查询到类似商品");
         }
@@ -352,10 +386,35 @@ public class GoodsController {
 
 
     @PostMapping("/upload")
-    public Result uploadNewItem(@RequestBody ItemDTO itemDTO) {
+    public Result uploadNewItem(@RequestParam(required = false) MultipartFile photo,
+                                @RequestParam String kind,
+                                @RequestParam String name,
+                                @RequestParam(required = false) String intro,
+                                @RequestParam BigDecimal price,
+                                @RequestParam Integer number,
+                                @RequestParam Long seller_id)
+            throws IOException {
+        String folder = "user_head/";
+        String originalPhotoName = photo.getOriginalFilename();
+        String photoType = FileUtil.extName(originalPhotoName);
+        String photoUuid = IdUtil.fastSimpleUUID();
+        String photoUUID = photoUuid + StrUtil.DOT + photoType;
+        String photoURL = uploadPicService.uploadPic(photo,photoUUID,folder);
+
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setPhoto(photoURL);
+        itemDTO.setKind(kind);
+        itemDTO.setName(name);
+        itemDTO.setIntro(intro);
+        itemDTO.setPrice(price);
+        itemDTO.setNumber(number);
+        itemDTO.setSeller_id(seller_id);
+
         Long itemId = goodService.uploadItem(itemDTO);
         ItemVO itemVo = goodService.getItemById(itemId);
+
         System.out.println(itemVo);
+
         return Result.success(itemVo);
     }
 
@@ -365,4 +424,25 @@ public class GoodsController {
         return Result.success(goodService.getGood(itemDTO.getItemId()));
     }
 
+    @GetMapping("/itemInfo/{userId}")
+    @ApiOperation("[我卖的]0未售出|1已售出|2全部")
+    public Result getInfoById(@PathVariable Long userId,@RequestParam Integer sort,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        if (sort==0||sort==1||sort==2) {
+            List<ItemVO> info;
+            info = goodService.getInfoBySort(userId,sort,pageNum,pageSize);
+            if (info.isEmpty()) {
+                return Result.error(Constants.CODE_400,"未查询到任何商品");
+            }
+            return Result.success(info,goodService.getCountBySort(userId,sort).toString());
+        } else {
+            return Result.error(Constants.CODE_400,"参数错误");
+        }
+    }
+
+    @DeleteMapping("/del/{itemId}")
+    @ApiOperation("下架商品")
+    public Result delItem(@PathVariable Long itemId) {
+        goodsMapper.deleteById(itemId);
+        return Result.success();
+    }
 }

@@ -3,8 +3,10 @@ server:
 
 spring:
   redis:
-    host: 47.113.218.23
-    port: 6379
+#    host: 47.113.218.23
+    host: 47.110.49.117
+    port: 6380
+    password: lyd9738faq
   mail:
     host: smtp.qq.com
     port: 465
@@ -24,8 +26,9 @@ spring:
 #    url: jdbc:mysql://localhost:3306/market?serverTimezone=GMT%2b8
 #    username: root
 #    password: gaoyiren011218
-    url: jdbc:mysql://47.113.218.23:3306/market?serverTimezone=GMT%2b8
-    username: root
+#    url: jdbc:mysql://47.113.218.23:3306/market?serverTimezone=GMT%2b8
+    url: jdbc:mysql://47.110.49.117:3306/circle?serverTimezone=GMT%2b8
+    username: circle
     password: 123456
     # druid数据源配置
     type: com.alibaba.druid.pool.DruidDataSource

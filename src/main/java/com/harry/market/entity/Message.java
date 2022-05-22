@@ -3,21 +3,16 @@ package com.harry.market.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
-@TableName(value="`order`")
-public class Order {
-    @TableId(value="id",type = IdType.ASSIGN_ID)
+@TableName("message")
+public class Message {
+    @TableId(value = "id",type = IdType.ASSIGN_ID)
     private Long id;
-    private Long item_id;
-    private Long seller_id;
-    private Integer number;
-    private BigDecimal per_price;
-    private boolean status;
+    private Long from_id;
+    private Long to_id;
+    private String msg;
     @TableLogic
     private boolean is_deleted;
     @TableField(fill = FieldFill.INSERT)

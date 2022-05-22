@@ -11,4 +11,7 @@ public class UserInfoVO {
     private String qq;
     private Integer age;
     private String intro;
+
+    private String address;
+    private String gender;
 }

@@ -30,7 +30,6 @@ import java.util.Random;
 
 @SpringBootTest
 class MarketApplicationTests {
-
     @Autowired
     GoodService goodService;
 
@@ -77,12 +76,12 @@ class MarketApplicationTests {
 //        goodService.insertCrawlerItem("美妆护肤");
 //        goodService.insertCrawlerItem("二手书籍");
 //        goodService.insertCrawlerItem("日用家居");
-        goodService.insertCrawlerItem("零食饮品");
+//        goodService.insertCrawlerItem("零食饮品");
     }
 
     @Test
     void excelInsert() {
-        userService.insertExcelUser(1,15);
+//        userService.insertExcelUser(1,15);
     }
 
     @Autowired

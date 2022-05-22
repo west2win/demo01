@@ -1,5 +1,6 @@
 package com.harry.market.utils;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.harry.market.entity.Item;
 import com.harry.market.mapper.GoodsMapper;
 import org.jsoup.Jsoup;
@@ -20,7 +21,7 @@ public class Crawler {
     public List<Item> getCrawlerItem(String kind) throws IOException {
         List<Item> items = new ArrayList<Item>();
 
-        for (int i = 1; i < 20; i+=2) {
+        for (int i = 20; i < 40; i+=2) {
             String url = "https://search.jd.com/Search?keyword="+kind+"&page="+i;
             Document document = Jsoup.parse(new URL(url), 30000);
             Element goodsList = document.getElementById("J_goodsList");
@@ -34,15 +35,16 @@ public class Crawler {
 
                 Item item = new Item();
                 Long nid = new Long(id);
-                item.setId(nid);
+                item.setId(IdWorker.getId(item));
                 item.setName(pname);
                 item.setPhoto(img);
                 BigDecimal nprice = new BigDecimal(price);
                 item.setPrice(nprice);
                 Random seed = new Random();
-                Long sid = Long.valueOf(seed.nextInt(10));
+//                Long sid = Long.valueOf(seed.nextInt(10));
                 item.setNumber(seed.nextInt(999));
-                item.setSeller_id(sid);
+//                item.setSeller_id(sid);
+                item.setSeller_id(1522836518328852482L);
                 item.setKind(kind);
                 items.add(item);
             }

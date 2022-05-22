@@ -10,6 +10,7 @@ import com.harry.market.mapper.*;
 import com.harry.market.service.GoodService;
 import com.harry.market.service.OrderService;
 import com.harry.market.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -119,14 +120,35 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/itemInfo/{userId}")
-    @ApiOperation("获取某用户所有订单信息")
-    public Result getInfoById(@PathVariable Long userId) {
-        List<OrderVO> info = orderService.getInfoByUserId(userId);
+//    @GetMapping("/itemInfo/{userId}")
+//    @ApiOperation("[我买的]获取某用户所有订单信息")
+    public Result getInfoById(@PathVariable Long userId,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        List<OrderVO> info = orderService.getInfoByUserId(userId,pageNum,pageSize);
         if (!info.isEmpty()) {
             return Result.success(info,orderService.getOrderNumByUserId(userId).toString());
         } else {
             return Result.error(Constants.CODE_400,"未查询到任何订单");
+        }
+    }
+
+    @GetMapping("/itemInfo/{userId}")
+    @ApiOperation("[我买的]获取某用户待收货/已完成订单信息(0为待收货/1为已完成/2为全部)")
+    public Result getInfoBySort(@PathVariable Long userId,@RequestParam Integer sort,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+        List<OrderVO> info;
+        if (sort==0||sort==1) {
+            info = orderService.getInfoBySort(userId,sort,pageNum,pageSize);
+            if (info.isEmpty()) {
+                return Result.error(Constants.CODE_400,"未查询到任何订单");
+            }
+            return Result.success(info,orderService.getCountBySort(userId,sort).toString());
+        } else if (sort==2) {
+            info = orderService.getInfoByUserId(userId,pageNum,pageSize);
+            if (info.isEmpty()) {
+                return Result.error(Constants.CODE_400,"未查询到任何订单");
+            }
+            return Result.success(info,orderService.getOrderNumByUserId(userId).toString());
+        } else {
+            return Result.error(Constants.CODE_400,"参数错误");
         }
     }
 
@@ -142,6 +164,24 @@ public class OrderController {
     public Result changeBuyerInfo(@RequestBody BuyerMsg buyerMsg) {
         orderService.modifyBuyerMsg(buyerMsg);
         return Result.success(buyerMsg);
+    }
+
+    @DeleteMapping("/cancel/{orderId}")
+    @ApiOperation("取消顶单")
+    public Result cancelOrder(@PathVariable Long orderId) {
+        orderMapper.deleteById(orderId);
+        userOrderMapper.deleteById(orderId);
+        return Result.success();
+    }
+
+    @GetMapping("/confirm/{orderId}")
+    @ApiOperation("确认收货")
+    public Result confirm(@PathVariable Long orderId) {
+        Order order = new Order();
+        order.setId(orderId);
+        order.setStatus(true);
+        orderMapper.updateById(order);
+        return Result.success();
     }
 
 

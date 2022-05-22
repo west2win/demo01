@@ -136,8 +136,16 @@ public class UserController {
 
     @PostMapping("/chgPwd")
     public Result changePassword(@RequestBody ChgPwdDTO chgPwdDTO) {
+        List<User> us = userMapper.sameEmail(chgPwdDTO.getEmail());
+        if (us.isEmpty()) {
+            return Result.error(Constants.CODE_400,"该邮箱未被注册");
+        }
+//        String password = us.get(0).getPassword();
+//        if (password != null && !encoder.matches(chgPwdDTO.getOldPassword(),password)) {
+//            return Result.error(Constants.CODE_400,"原密码错误");
+//        }
         userService.changePassword(chgPwdDTO);
-        return Result.success(userService.getUserById(chgPwdDTO.getUserId()));
+        return Result.success(userService.getUserById(userService.getUserbyEmail(chgPwdDTO.getEmail()).getId()));
     }
 
     @PostMapping("/chgUInfo")

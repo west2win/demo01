@@ -16,4 +16,6 @@ public class OrderVO {
     private String itemPhoto;
     private BigDecimal price;
     private Integer number;
+    private String status;
+    private String date;
 }
