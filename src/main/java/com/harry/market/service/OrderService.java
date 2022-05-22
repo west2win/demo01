@@ -68,11 +68,17 @@ public class OrderService extends ServiceImpl<OrderMapper, Order> {
         QueryWrapper<UserOrder> wrapper = new QueryWrapper<>();
         wrapper.eq("buyer_id",buyer_id);
         List<UserOrder> uos = userOrderMapper.selectList(wrapper);
-        ArrayList<Order> orders = new ArrayList<>();
         ArrayList<OrderVO> orderVOS = new ArrayList<>();
+        if (uos.isEmpty()) {
+            return null;
+        }
         for (UserOrder uo : uos) {
             orderQueryWrapper.eq("id",uo.getId());
             Order order = orderMapper.selectOne(orderQueryWrapper);
+//            Order order = orderMapper.selectById(uo.getId());
+            if (order==null) {
+                continue;
+            }
             OrderVO o = new OrderVO();
             o.setOrderId(order.getId().toString());
             ItemVO item = goodService.getItemById(order.getItem_id());
@@ -84,17 +90,23 @@ public class OrderService extends ServiceImpl<OrderMapper, Order> {
             o.setStatus(sta);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm");
             o.setDate(sdf.format(order.getGmt_modified()));
-
             orderVOS.add(o);
         }
         return orderVOS;
     }
 
     public Long getCountBySort(Long buyer_id,Integer status) {
-        QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<>();
-        orderQueryWrapper.eq("buyer_id",buyer_id);
-        orderQueryWrapper.eq("status",status);
-        return orderMapper.selectCount(orderQueryWrapper);
+        QueryWrapper<UserOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq("buyer_id",buyer_id);
+        List<UserOrder> uos = userOrderMapper.selectList(wrapper);
+        long count = 0;
+        QueryWrapper<Order> wrapper1 = new QueryWrapper<>();
+        wrapper1.eq("status",status);
+        for (UserOrder uo : uos) {
+            wrapper1.eq("id",uo.getId());
+            count += orderMapper.selectCount(wrapper1);
+        }
+        return count;
     }
 
 
