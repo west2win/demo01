@@ -143,7 +143,7 @@ public class UserController {
 
     /**
      * @author 222100209_李炎东
-     * @param id
+     * @param id 用户id
      * @return
      */
     //获取用户信息(头像、昵称、联系方式等)

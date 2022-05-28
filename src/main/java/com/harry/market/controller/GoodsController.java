@@ -54,6 +54,9 @@ public class GoodsController {
     UploadPicService uploadPicService;
     String folder = "item_photo/";
 
+//    /**
+//     * @author HarryGao
+//     */
 //    @PostMapping("/upload")
 //    public Result upload(@RequestParam Long id,@RequestParam String name, @RequestParam BigDecimal price, @RequestParam Integer number, @RequestParam MultipartFile intro, @RequestParam MultipartFile photo) throws IOException {
 //
