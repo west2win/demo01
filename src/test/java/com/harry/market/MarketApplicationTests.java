@@ -81,7 +81,7 @@ class MarketApplicationTests {
 
     @Test
     void excelInsert() {
-//        userService.insertExcelUser(1,15);
+        userService.insertExcelUser(16,30);
     }
 
     @Autowired

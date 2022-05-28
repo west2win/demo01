@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author 222100209_李炎东
+ * @apiNote 从Excel中获取用户信息
+ */
 public class ExcelUtill {
     private XSSFSheet sheet;
 
@@ -19,7 +23,8 @@ public class ExcelUtill {
     }
 
     /**
-     * 构造函数，初始化excel数据
+     * @author 222100209_李炎东
+     * @usage 构造函数，初始化excel数据
      * @param filePath  excel路径
      * @param sheetName sheet表名
      */
@@ -36,9 +41,10 @@ public class ExcelUtill {
     }
 
     /**
-     * 根据行和列的索引获取单元格的数据
-     * @param row
-     * @param column
+     * @author 222100209_李炎东
+     * @usage 根据行和列的索引获取单元格的数据
+     * @param row 行
+     * @param column 列
      * @return
      */
     public String getExcelDateByIndex(int row,int column){
@@ -47,6 +53,13 @@ public class ExcelUtill {
         return cell;
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @usage 从Excel中获取UserDetails数据
+     * @param row 行
+     * @param num 列
+     * @return
+     */
     public List<UserDetails> getExcelUser(int row,int num) {
         ArrayList<UserDetails> users = new ArrayList<>();
 

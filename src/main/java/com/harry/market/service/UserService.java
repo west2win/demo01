@@ -21,44 +21,43 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-
+/**
+ * @authors HarryGao、222100209_李炎东
+ */
 @Service
 public class UserService extends ServiceImpl<UserMapper,User> {
-
     @Resource
     private UserMapper userMapper;
-
     @Resource
     private UserDetailsMapper userDetailsMapper;
-
     @Resource
     private BuyerMsgMapper buyerMsgMapper;
-
     @Resource
     private GoodsMapper goodsMapper;
-
     @Resource
     private UserOrderMapper userOrderMapper;
-
     @Resource
     private OrderMapper orderMapper;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private UserController userController;
-
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-
-
     private static final Log LOG = Log.get();
 
+    /**
+     * @author HarryGao
+     * @param userDTO
+     * @return
+     */
     public UserDTO login(UserDTO userDTO) {
+        // 改成强Hash加密了 by lyd
 //        userDTO.setPassword(Md5Utils.code(userDTO.getPassword()));
         String password = getUserPwd(userDTO.getUsername());
         if (password != null && encoder.matches(userDTO.getPassword(),password)) {
@@ -69,6 +68,11 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         }
     }
 
+    /**
+     * @author HarryGao
+     * @param userDTO
+     * @return
+     */
     public UserVO getUserInfo(UserDTO userDTO){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",userDTO.getUsername());
@@ -91,6 +95,11 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         return userVO;
     }
 
+    /**
+     * @author HarryGao
+     * @param loginName
+     * @return
+     */
     private String getUserPwd(String loginName){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",loginName);
@@ -104,6 +113,11 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         return password;
     }
 
+    /**
+     * @author HarryGao
+     * @param username
+     * @return
+     */
     public String getUserPerm(String username) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
@@ -111,12 +125,22 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         return perm;
     }
 
+    /**
+     * @author HarryGao
+     * @param username
+     * @return
+     */
     public User getUser(String username) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
         return userMapper.selectOne(wrapper);
     }
 
+    /**
+     * @author HarryGao
+     * @param username
+     * @return
+     */
     public Long getUserId(String username) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
@@ -124,7 +148,8 @@ public class UserService extends ServiceImpl<UserMapper,User> {
     }
 
     /**
-     *
+     * @author 222100209_李炎东
+     * @usage 从表格中读取用户信息，并导入数据库
      * @param row 从几行开始输入
      * @param num 输入几条数据
      */
@@ -156,6 +181,12 @@ public class UserService extends ServiceImpl<UserMapper,User> {
 //        return userDetailsMapper.getUserInfo(username);
 //    }
 
+    /**
+     * @author 222100209_李炎东
+     * @usage 通过用户Id查询并返回给前端
+     * @param id 用户Id
+     * @return
+     */
     public UserInfoVO getUserInfoById(Long id) {
         UserInfoVO info;
         info = userDetailsMapper.getUserInfo(id);
@@ -169,6 +200,11 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         return info;
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @usage 修改密码
+     * @param chgPwdDTO
+     */
     public void changePassword(ChgPwdDTO chgPwdDTO) {
         String password = chgPwdDTO.getNewPassword();
         password = encoder.encode(password);
@@ -179,10 +215,20 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         userService.updateById(user);
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param id 用户Id
+     * @return
+     */
     public User getUserById(Long id) {
         return userMapper.selectById(id);
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @usage 修改用户信息
+     * @param chgUserInfoDTO
+     */
     public void changeUserInfo(ChgUserInfoDTO chgUserInfoDTO) {
         UserDetails userDetails = new UserDetails();
         userDetails.setId(chgUserInfoDTO.getUserId());
@@ -206,6 +252,12 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         buyerMsgMapper.updateById(buyerMsg);
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @usage 通过邮箱获取用户信息
+     * @param email
+     * @return
+     */
     public UserDetails getUserbyEmail(String email) {
         QueryWrapper<UserDetails> wrapper = new QueryWrapper<>();
         wrapper.eq("email",email);
@@ -213,6 +265,11 @@ public class UserService extends ServiceImpl<UserMapper,User> {
 
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @usage 逻辑删除用户
+     * @param userId
+     */
     public void delUser(Long userId) {
         QueryWrapper<Item> itemWrapper = new QueryWrapper<>();
         itemWrapper.eq("seller_id",userId);
@@ -231,13 +288,82 @@ public class UserService extends ServiceImpl<UserMapper,User> {
         userMapper.deleteById(userId);
     }
 
-    public List<AuditUserVO> getUser(int pageNum,int pageSize,String sort,String order) {
-        List<AuditUserVO> allUser = userMapper.getAllUser(pageNum, pageSize, sort, order);
-        return allUser;
+    /**
+     * @author 222100209_李炎东
+     * @param pageNum 第?页
+     * @param pageSize 一页?条数据
+     * @param sort 筛选参数
+     * @param order 排序
+     * @return
+     */
+    public List<AuditUserVO> getUser(Integer pageNum,Integer pageSize,String sort,String order) {
+        List<AuditUserVO> allUser = userMapper.getAllUser(pageNum*pageSize, pageSize, sort, order);
+        ArrayList<AuditUserVO> res = new ArrayList<>();
+        for (AuditUserVO vo : allUser) {
+            AuditUserVO r = new AuditUserVO();
+            r = vo;
+            if (vo.is_deleted()) {
+                r.setStatus("已封禁");
+            } else {
+                r.setStatus("正常");
+            }
+            res.add(r);
+        }
+
+        return res;
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @usage 获取所有用户数量
+     * @return
+     */
     public Long getUserCount() {
         return userMapper.getUserCount();
+    }
+
+    /**
+     * @author 222100209_李炎东
+     * @usage 模糊查询用户
+     * @param nname 查询参数
+     * @param pageNum 第?页
+     * @param pageSize 一页?条数据
+     * @return
+     */
+    public List<AuditUserVO> searchUser(String nname,Integer pageNum, Integer pageSize) {
+        QueryWrapper<UserDetails> wrapper = new QueryWrapper<>();
+        wrapper.like("nickname",nname);
+        wrapper.last("limit "+pageNum*pageSize+","+pageSize);
+        List<UserDetails> users = userDetailsMapper.selectList(wrapper);
+        ArrayList<AuditUserVO> res = new ArrayList<>();
+        for (UserDetails user : users) {
+            AuditUserVO vo = new AuditUserVO();
+            vo.setUserId(user.getId().toString());
+            QueryWrapper<Item> itemWrapper = new QueryWrapper<>();
+            itemWrapper.eq("seller_id",user.getId());
+            Long released = goodsMapper.selectCount(itemWrapper);
+            itemWrapper.eq("is_audit",1);
+            Long unpassed = goodsMapper.selectCount(itemWrapper);
+            vo.setUsername(user.getNickname());
+            vo.setEmail(user.getEmail());
+            vo.setHead(user.getHead());
+            vo.setReleasedNum(released);
+            vo.setUnpassedNum(unpassed);
+            res.add(vo);
+        }
+        return res;
+    }
+
+    /**
+     * @author 222100209_李炎东
+     * @usgae 获取查询到的结果数量
+     * @param nName
+     * @return
+     */
+    public Long searchUserCount(String nName) {
+        QueryWrapper<UserDetails> wrapper = new QueryWrapper<>();
+        wrapper.like("nickname",nName);
+        return userDetailsMapper.selectCount(wrapper);
     }
 
 }

@@ -11,6 +11,11 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import org.springframework.web.socket.server.HandshakeInterceptor;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
+/**
+ * @author 222100209_李炎东
+ * @usage: 配置WebSocket
+ */
+
 
 @Configuration
 @EnableWebSocket

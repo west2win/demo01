@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * @author HarryGao
+ */
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler()

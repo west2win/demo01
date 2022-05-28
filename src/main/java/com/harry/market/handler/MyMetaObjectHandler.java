@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+/**
+ * @author 222100209_李炎东
+ */
+
 @Slf4j
 @Component // 一定不要忘记把处理器加到IOC容器中！
 public class MyMetaObjectHandler implements MetaObjectHandler {

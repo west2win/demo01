@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author 222100209_李炎东
+ */
 public final class WebSocketUtils {
 
     /**

@@ -3,6 +3,10 @@ package com.harry.market.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * @author HarryGao
+ * @apiNote 已弃用(by lyd)
+ */
 public class Md5Utils {
     /**
      * MD5加密类

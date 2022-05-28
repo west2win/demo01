@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author 天狗
+ * @author 222100209_李炎东
  * @description 会话信息过期策略
  */
 

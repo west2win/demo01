@@ -15,6 +15,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @usage: 将druid配置并注册到bean
+ */
+
 @Configuration
 public class DruidConfig {
 

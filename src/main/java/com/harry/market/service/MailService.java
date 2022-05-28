@@ -12,17 +12,26 @@ import javax.mail.internet.MimeMessage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author 222100209_李炎东
+ */
 @Service
 public class MailService {
 
     @Autowired
     private JavaMailSenderImpl mailSender;
-
+    //设置返回日期格式
     private final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Value("${spring.mail.username}")
     private String from;
 
+    /**
+     * @author 222100209_李炎东
+     * @param email 要发送的邮箱
+     * @param verCode 要发送的验证码
+     * @return
+     */
     public boolean sendMail(String email,String verCode) {
 //        String from = "362664609@qq.com";
         String time=sdf.format(new Date());
@@ -30,16 +39,15 @@ public class MailService {
         MimeMessageHelper helper = null;
 
 //        System.out.println(from);
-
         try {
             //发送复杂的邮件
             mimeMessage = mailSender.createMimeMessage();
+            //这个h5是俺自己写的
             //组装
             helper= new MimeMessageHelper(mimeMessage, true);
             //邮件标题
             helper.setSubject("【Circle二手平台】 验证码");
             //因为设置了邮件格式所以html标签有点多，后面的ture为支持识别html标签
-            //想要不一样的邮件格式，百度搜索一个html编译器，自我定制。
             helper.setText("<h3>\n" +
                     "\t<span style=\"font-size:16px;\">亲爱的用户"+email+"：</span> \n" +
                     "</h3>\n" +
@@ -67,7 +75,6 @@ public class MailService {
             //发送失败--服务器繁忙
             return false;
         }
-
         return true;
     }
 }

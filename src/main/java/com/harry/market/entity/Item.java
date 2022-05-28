@@ -11,7 +11,6 @@ import java.util.Date;
 @Data
 @TableName(value="item")
 public class Item {
-
     @TableId(value = "id",type = IdType.ASSIGN_ID)
     private Long id;
     private String kind;

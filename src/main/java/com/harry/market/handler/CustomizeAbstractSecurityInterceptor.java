@@ -12,7 +12,7 @@ import javax.servlet.*;
 import java.io.IOException;
 
 /**
- * @author 天狗
+ * @author 222100209_李炎东
  * @Description 权限拦截器
  */
 

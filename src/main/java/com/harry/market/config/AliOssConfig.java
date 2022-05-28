@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @usage: 将AliOss工具注册到bean
+ */
+
 @Data
 @Configuration
 public class AliOssConfig {

@@ -25,7 +25,7 @@ public interface GoodsMapper extends BaseMapper<Item> {
     @Select("select  i.is_audit,i.id,i.kind,name,ud.nickname sellerName,ud.head sellerHead,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where is_audit=2 order by gmt_modified desc limit #{pageNum},#{pageSize}")
     List<ItemVO> selectNewest(Integer pageNum, Integer pageSize);
 
-    @Select("select i.is_audit,i.id,i.kind,name,ud.nickname sellerName,ud.head sellerHead,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where i.id = #{id}")
+    @Select("select i.is_audit,i.id,i.kind,name,ud.nickname sellerName,ud.head sellerHead,i.introduction,photo,price,i.gmt_modified,number from item i inner join user_details ud on i.seller_id=ud.id where i.id = #{id}")
     List<ItemVO> findGoods(Long id);
 
     @Select ("select * from item where name like \"%\"#{nname}\"%\"")
@@ -58,7 +58,7 @@ public interface GoodsMapper extends BaseMapper<Item> {
     @Select("select COUNT(*) from item where kind = #{kind} and is_audit=2")
     Integer getTotalNumByKind(String kind);
 
-    @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where i.id=#{itemId}")
+    @Select("select  i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified,i.number from item i inner join user_details ud on i.seller_id=ud.id where i.id=#{itemId}")
     ItemVO selectItembyId(Long itemId);
 
     @Select("select  i.is_audit,i.id,i.kind,name,ud.nickname sellerName,i.introduction,photo,price,i.gmt_modified from item i inner join user_details ud on i.seller_id=ud.id where is_audit=2 order by price ${order} limit #{pageNum},#{pageSize}")

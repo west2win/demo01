@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author 222100209_李炎东
+ */
+
 public class WebSocketPushHandler extends TextWebSocketHandler {
     private static final List<WebSocketSession> USER_LIST = new ArrayList<>();
 

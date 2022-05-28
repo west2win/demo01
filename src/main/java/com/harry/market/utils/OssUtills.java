@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * @author 222100209_李炎东
+ * @apiNote AliOss配置类
+ */
 @Slf4j
 @Component
 public class OssUtills {
@@ -88,8 +92,8 @@ public class OssUtills {
     }
 
     /**
-     * 上传到OSS服务器  如果同名文件会覆盖服务器上的
-     *
+     * @author 222100209_李炎东
+     * @usage上传到OSS服务器  如果同名文件会覆盖服务器上的
      * @param instream 文件流
      * @param fileName 文件名称 包括后缀名
      * @return 出错返回"" ,唯一MD5数字签名
@@ -120,7 +124,14 @@ public class OssUtills {
 //        ossClient.shutdown();
     }
 
-    //上传一张图片
+    /**
+     * @author 222100209_李炎东
+     * @usage 上传一张图片
+     * @param multipartFile 图片
+     * @param ossClient Oss客户端
+     * @param folder 路径
+     * @return
+     */
     public static String saveImg(MultipartFile multipartFile,OSSClient ossClient,String folder){
         // 获取图片名字
         String fileName = multipartFile.getOriginalFilename();

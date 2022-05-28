@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author 222100209_李炎东
+ * @apiNote 从京东爬取数据
+ */
 public class Crawler {
 
     public List<Item> getCrawlerItem(String kind) throws IOException {

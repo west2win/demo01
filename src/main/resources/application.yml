@@ -68,8 +68,10 @@ logging:
   config: classpath:logback-spring.xml
 
 aliyun:
-  accessKeyId: LTAI5t8NCpW65uqoVTmVqR5m
-  accessKeySecret: 630WOt1yn9FTRSjmdbHx8uTL38BLzr
+#  accessKeyId: LTAI5t8NCpW65uqoVTmVqR5m
+  accessKeyId: LTAI5tPqjUEWBL5qK2EbQERh
+#  accessKeySecret: 630WOt1yn9FTRSjmdbHx8uTL38BLzr
+  accessKeySecret: DsP0PXdpJYyqcYGPY0XAevlSM4BIIS
   oss:
 #    endpoint: https://oss-cn-heyuan.aliyuncs.com
     endpoint: oss-cn-heyuan.aliyuncs.com

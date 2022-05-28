@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @author 222100209_李炎东
+ */
+
 @Component
 public class CustomizeAuthenticationFailureHandler implements AuthenticationFailureHandler {
 

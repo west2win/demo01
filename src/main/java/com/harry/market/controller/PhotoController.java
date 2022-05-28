@@ -10,6 +10,7 @@ import com.harry.market.entity.UserDetails;
 import com.harry.market.mapper.GoodsMapper;
 import com.harry.market.mapper.UserDetailsMapper;
 import com.harry.market.service.UploadPicService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ import java.net.URLEncoder;
 
 /**
  * @program: market
- * @author: HarryGao
+ * @authors: HarryGao 、 222100209_李炎东
  * @create: 2022-03-19 19:34
  */
 
@@ -43,6 +44,13 @@ public class PhotoController {
     @Autowired
     GoodsMapper goodsMapper;
 
+//    /**
+//     * @author HarryGao
+//     * @param userId
+//     * @param photo
+//     * @return
+//     * @throws IOException
+//     */
 //    @GetMapping("/{fileUUID}")
 //    public void download(@PathVariable String fileUUID, HttpServletResponse response) throws IOException {
 //        //根据文件的唯一标识码获取文件
@@ -58,7 +66,15 @@ public class PhotoController {
 //        os.close();
 //    }
 
+    /**
+     * @author 222100209_李炎东
+     * @param userId 用户Id
+     * @param photo 用户头像
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/upHead")
+    @ApiOperation("上传用户头像")
     public Result uploadUserHead(@RequestParam Long userId, @RequestParam MultipartFile photo) throws IOException {
         String folder = "item_photo/";
         String originalPhotoName = photo.getOriginalFilename();
@@ -73,7 +89,15 @@ public class PhotoController {
         return Result.success(photoURL);
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param itemId 商品Id
+     * @param photo 商品图片
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/upPhoto")
+    @ApiOperation("上传商品照片")
     public Result uploadItemPhoto(@RequestParam Long itemId,@RequestParam MultipartFile photo) throws IOException {
         String folder = "user_head/";
         String originalPhotoName = photo.getOriginalFilename();

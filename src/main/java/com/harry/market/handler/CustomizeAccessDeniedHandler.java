@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author 天狗
+ * @author 222100209_李炎东
  * @description 权限拒绝处理逻辑
  */
 

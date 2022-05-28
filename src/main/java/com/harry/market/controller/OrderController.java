@@ -19,6 +19,9 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * @author 222100209_李炎东
+ */
 
 @ResponseBody
 @RestController
@@ -28,25 +31,18 @@ public class OrderController {
 
     @Resource
     private OrderMapper orderMapper;
-
     @Resource
     private GoodsMapper goodsMapper;
-
     @Resource
     private UserOrderMapper userOrderMapper;
-
     @Resource
     private UserDetailsMapper userDetailsMapper;
-
     @Resource
     private BuyerMsgMapper buyerMsgMapper;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private GoodService goodService;
-
     @Autowired
     private OrderService orderService;
 
@@ -61,7 +57,11 @@ public class OrderController {
 //        }
 //    }
 
-    //创建订单
+    /**
+     * @author 222100209_李炎东
+     * @param orderDTO 商品信息
+     * @return
+     */
     @PostMapping("/newOrder")
     @ApiOperation("新建订单")
     public Result newOrder(@RequestBody OrderDTO orderDTO) {
@@ -75,6 +75,7 @@ public class OrderController {
         } else {
             Order order = new Order();
             UserOrder userOrder = new UserOrder();
+            Item good = new Item();
 
             Item item = goodService.getGood(good_id);
             if (item == null) {
@@ -113,6 +114,10 @@ public class OrderController {
 
             buyerMsgMapper.updateById(buyerMsg);
 
+            good.setId(good_id);
+            good.setNumber(item.getNumber()-number);
+            goodsMapper.updateById(good);
+
             OrderVO orderVO = orderService.getOrdermsgByOrderId(userOrder.getId());
             System.out.println(orderVO);
 
@@ -122,36 +127,43 @@ public class OrderController {
 
 //    @GetMapping("/itemInfo/{userId}")
 //    @ApiOperation("[我买的]获取某用户所有订单信息")
-    public Result getInfoById(@PathVariable Long userId,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
-        List<OrderVO> info = orderService.getInfoByUserId(userId,pageNum,pageSize);
-        if (!info.isEmpty()) {
-            return Result.success(info,orderService.getOrderNumByUserId(userId).toString());
-        } else {
-            return Result.error(Constants.CODE_400,"未查询到任何订单");
-        }
-    }
+//    public Result getInfoById(@PathVariable Long userId,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
+//        List<OrderVO> info = orderService.getInfoByUserId(userId,pageNum,pageSize);
+//        if (!info.isEmpty()) {
+//            return Result.success(info,orderService.getOrderNumByUserId(userId).toString());
+//        } else {
+//            return Result.error(Constants.CODE_400,"未查询到任何订单");
+//        }
+//    }
 
+    /**
+     * @author 222100209_李炎东
+     * @param userId 用户Id
+     * @param sort 筛选参数
+     * @param pageNum 第?页
+     * @param pageSize 一页?条数据
+     * @return
+     */
     @GetMapping("/itemInfo/{userId}")
     @ApiOperation("[我买的]获取某用户待收货/已完成订单信息(0为待收货/1为已完成/2为全部)")
     public Result getInfoBySort(@PathVariable Long userId,@RequestParam Integer sort,@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
         List<OrderVO> info;
-        if (sort==0||sort==1) {
+        if (sort==0||sort==1||sort==2) {
             info = orderService.getInfoBySort(userId,sort,pageNum,pageSize);
             if (info.isEmpty()) {
                 return Result.error(Constants.CODE_400,"未查询到任何订单");
             }
             return Result.success(info,orderService.getCountBySort(userId,sort).toString());
-        } else if (sort==2) {
-            info = orderService.getInfoByUserId(userId,pageNum,pageSize);
-            if (info.isEmpty()) {
-                return Result.error(Constants.CODE_400,"未查询到任何订单");
-            }
-            return Result.success(info,orderService.getOrderNumByUserId(userId).toString());
         } else {
             return Result.error(Constants.CODE_400,"参数错误");
         }
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param userId 用户Id
+     * @return
+     */
     @GetMapping("/buyerInfo/{userId}")
     @ApiOperation("获取某订单买家地址信息等")
     public Result getBuyerInfo(@PathVariable Long userId) {
@@ -159,6 +171,11 @@ public class OrderController {
         return Result.success(buyerMsg);
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param buyerMsg 新的卖家信息
+     * @return
+     */
     @PostMapping("/chgBuyerInfo")
     @ApiOperation("修改卖家信息(地址电话等)")
     public Result changeBuyerInfo(@RequestBody BuyerMsg buyerMsg) {
@@ -166,14 +183,24 @@ public class OrderController {
         return Result.success(buyerMsg);
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param orderId 订单Id
+     * @return
+     */
     @DeleteMapping("/cancel/{orderId}")
-    @ApiOperation("取消顶单")
+    @ApiOperation("取消订单")
     public Result cancelOrder(@PathVariable Long orderId) {
         orderMapper.deleteById(orderId);
         userOrderMapper.deleteById(orderId);
         return Result.success();
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param orderId 订单Id
+     * @return
+     */
     @GetMapping("/confirm/{orderId}")
     @ApiOperation("确认收货")
     public Result confirm(@PathVariable Long orderId) {

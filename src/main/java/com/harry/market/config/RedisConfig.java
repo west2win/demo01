@@ -20,29 +20,13 @@ import javax.crypto.KeyGenerator;
 import java.lang.reflect.Method;
 import java.time.Duration;
 
+/**
+ * @usage: 配置redis并注册到bean
+ */
+
 @Configuration
 @EnableCaching
 public class RedisConfig {
-
-    /**
-     * 自定义key规则
-     * @return
-     */
-//    @Bean
-//    public KeyGenerator keyGenerator() {
-//        return new KeyGenerator() {
-//            @Override
-//            public Object generate(Object target, Method method, Object... params) {
-//                StringBuilder sb = new StringBuilder();
-//                sb.append(target.getClass().getName());
-//                sb.append(method.getName());
-//                for (Object obj : params) {
-//                    sb.append(obj.toString());
-//                }
-//                return sb.toString();
-//            }
-//        };
-//    }
 
     /**
      * 设置RedisTemplate规则

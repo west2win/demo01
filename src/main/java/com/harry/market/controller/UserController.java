@@ -13,21 +13,17 @@ import com.harry.market.mapper.BuyerMsgMapper;
 import com.harry.market.mapper.UserDetailsMapper;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-//<<<<<<< HEAD
-//=======
 import javax.annotation.Resource;
 import java.util.List;
-//>>>>>>> a83b967 (商品上传)
-//import java.sql.Timestamp;
 
 
-//<<<<<<< HEAD
-
-
+/**
+ * @authors 222100209_李炎东
+ */
 @ResponseBody
 @RestController
 @RequestMapping("/user")
@@ -49,7 +45,13 @@ public class UserController {
     @Autowired
     private BuyerMsgMapper buyerMsgMapper;
 
+    /**
+     * @authors HarryGao
+     * @param userDTO
+     * @return
+     */
     @PostMapping("/login")
+    @ApiOperation("登录接口")
     public Result login(@RequestBody UserDTO userDTO) {
 //        String username = userDTO.getUsername();
         String email = userDTO.getEmail();
@@ -72,12 +74,18 @@ public class UserController {
 
     }
 
+    /**
+     * @author HarryGao
+     * @param userRegDTO
+     * @return
+     */
     @PostMapping("/register")
+    @ApiOperation("注册接口")
     public Result register(@RequestBody UserRegDTO userRegDTO) {
         String username = userRegDTO.getUsername();
 //        String password = Md5Utils.code(userDTO.getPassword());
 
-        // 改成强hash加密
+        // 改成强hash加密 by lyd
         String password = userRegDTO.getPassword();
         password = encoder.encode(password);
         userRegDTO.setPassword(password);
@@ -93,24 +101,19 @@ public class UserController {
         }else {
             User saveUser = new User();
             Long id = IdWorker.getId(saveUser);
-
             saveUser.setUsername(username);
             saveUser.setPassword(password);
             saveUser.setPerm("user");
             saveUser.setId(id);
-
             userMapper.insert(saveUser);
-
             UserDetails ud = new UserDetails();
             ud.setId(id);
             ud.setUsername(saveUser.getUsername());
             ud.setEmail(email);
             userDetailsMapper.insert(ud);
-
             BuyerMsg buyerMsg = new BuyerMsg();
             buyerMsg.setId(id);
             buyerMsgMapper.updateById(buyerMsg);
-
             UserDTO userDTO = new UserDTO();
             userDTO.setUsername(saveUser.getUsername());
             userDTO.setPassword(saveUser.getPassword());
@@ -118,23 +121,46 @@ public class UserController {
         }
     }
 
+    /**
+     * @author HarryGao
+     * @param id
+     * @return
+     */
     @PostMapping("/setAdmin")
+    @ApiOperation("设置为管理员")
     public Result register(@RequestParam Integer id){
         return Result.success(userMapper.setAdmin(id));
     }
 
+    /**
+     * @author HarryGao
+     * @return
+     */
     //查询所有数据
     @GetMapping()
+    @ApiOperation("获取所有数据")
     public Result findAll() {return Result.success(userService.list());}
 
+    /**
+     * @author 222100209_李炎东
+     * @param id
+     * @return
+     */
     //获取用户信息(头像、昵称、联系方式等)
     @GetMapping("/get")
+    @ApiOperation("获取用户信息")
     public Result getUserInfo(@RequestParam Long id) {
         UserInfoVO userInfo = userService.getUserInfoById(id);
         return Result.success(userInfo);
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param chgPwdDTO
+     * @return
+     */
     @PostMapping("/chgPwd")
+    @ApiOperation("修改密码")
     public Result changePassword(@RequestBody ChgPwdDTO chgPwdDTO) {
         List<User> us = userMapper.sameEmail(chgPwdDTO.getEmail());
         if (us.isEmpty()) {
@@ -148,7 +174,13 @@ public class UserController {
         return Result.success(userService.getUserById(userService.getUserbyEmail(chgPwdDTO.getEmail()).getId()));
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param chgUserInfoDTO
+     * @return
+     */
     @PostMapping("/chgUInfo")
+    @ApiOperation("修改用户信息")
     public Result changeUserInfo(@RequestBody ChgUserInfoDTO chgUserInfoDTO) {
         userService.changeUserInfo(chgUserInfoDTO);
         return Result.success(userService.getUserInfoById(chgUserInfoDTO.getUserId()));

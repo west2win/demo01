@@ -11,15 +11,19 @@ import com.harry.market.service.MailService;
 import com.harry.market.service.UserService;
 import com.harry.market.utils.RedisUtils;
 import com.harry.market.utils.VerCodeGenerateUtil;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.*;
-
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+/**
+ * @author 222100209_李炎东
+ * @apiNote 通过JavaMailSender发送高级邮件，作为邮箱验证码并存入redis
+ */
 
 @ResponseBody
 @RestController
@@ -42,9 +46,13 @@ public class MailController {
 
     private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-//    @GetMapping(value = "/send/{email}")
-//    public Result sendEmail(@PathVariable String email) {
+    /**
+     * @author 222100209_李炎东
+     * @param email 用户邮箱
+     * @return
+     */
     @GetMapping(value = "/send/{email}")
+    @ApiOperation("给对应用户发送邮件验证码")
     public Result sendEmail(@PathVariable String email) {
 //        List<UserDetails> user = userService.getUserbyEmail(email);
 //        if (user.isEmpty()) {
@@ -73,7 +81,14 @@ public class MailController {
         }
     }
 
+    /**
+     * @author 222100209_李炎东
+     * @param email 用户邮箱
+     * @param VerCode 收到的验证码
+     * @return
+     */
     @GetMapping("/cmp")
+    @ApiOperation("验证邮箱验证码")
     public Result compareCode(@RequestParam String email,@RequestParam String VerCode) {
         String code = redisUtils.get(email);
         if (code.equals(VerCode)) {

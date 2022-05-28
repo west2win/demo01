@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * @author 天狗
+ * @author 222100209_李炎东
  * @description 访问决策管理器
  */
 

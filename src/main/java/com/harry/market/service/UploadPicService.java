@@ -12,6 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * @author 222100209_李炎东
+ * @apiNote 上传图片
+ */
 @Service
 public class UploadPicService {
 
@@ -19,10 +23,10 @@ public class UploadPicService {
     private OSSClient ossClient;
 
     /**
-     *
-     * @param multipartFile
-     * @param fileName
-     * @param folder
+     * @author 222100209_李炎东
+     * @param multipartFile 图片
+     * @param fileName 图片名
+     * @param folder Oss中存储路径
      * @return 图片url
      * @throws FileNotFoundException
      */

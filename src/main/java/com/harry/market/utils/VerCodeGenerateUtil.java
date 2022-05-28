@@ -4,12 +4,18 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * @author 222100209_李炎东
+ * @apiNote 验证码生成工具类
+ */
 public class VerCodeGenerateUtil {
     //邮箱字符串提取，去除了容易混淆的几个字符比如0,o~
     private static final String SYMBOLS = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
     private static final Random RANDOM = new SecureRandom();
+
     /**
-     * 生成4位随机验证码
+     * @author 222100209_李炎东
+     * @usage 生成4位随机验证码
      * @return 返回4位验证码
      */
     public static String getVerCode() {
@@ -21,28 +27,28 @@ public class VerCodeGenerateUtil {
     }
 
     /**
-     * 验证码难度级别 Simple-数字 Medium-数字和小写字母 Hard-数字和大小写字母
+     * @author 222100209_李炎东
+     * @usage 验证码难度级别 Simple-数字 Medium-数字和小写字母 Hard-数字和大小写字母
      */
     public enum SecurityCodeLevel {
         Simple, Medium, Hard
     };
     /**
-     * 产生默认验证码，4位中等难度
-     *
+     * @author 222100209_李炎东
+     * @usage 产生默认验证码，4位中等难度
      * @return
      */
     public static String getSecurityCode() {
         return getSecurityCode(4, SecurityCodeLevel.Medium, false);
     }
     /**
-     * 产生长度和难度任意的验证码
-     *
-     * @param length
-     * @param level
-     * @param isCanRepeat
+     * @author 222100209_李炎东
+     * @usage 产生长度和难度任意的验证码
+     * @param length 长度
+     * @param level 难度
+     * @param isCanRepeat 验证码能否含有重复字符
      * @return
      */
-
     public static String getSecurityCode(int length, SecurityCodeLevel level, boolean isCanRepeat) {
         // 随机抽取len个字符
         int len = length;

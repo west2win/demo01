@@ -16,9 +16,11 @@ public class ItemVO {
     private String sellerHead;
     private String introduction;
     private BigDecimal price;
+    private Integer number;
     private String is_audit;
     private Date gmt_modified;
     //格式化后的日期
     private String sdf;
     private String status;
+    private String isSelled;
 }
