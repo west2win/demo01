@@ -1,5 +1,6 @@
 package com.harry.market.controller.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,6 +13,8 @@ public class ItemVO {
     private String kind;
     private String name;
     private String photo;
+//    @JsonIgnore
+    private String sellerId;
     private String sellerName;
     private String sellerHead;
     private String introduction;

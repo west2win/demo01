@@ -1,6 +1,7 @@
 package com.harry.market.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.harry.market.common.Constants;
 import com.harry.market.common.Result;
 import com.harry.market.controller.vo.UserInfoVO;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.TextMessage;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author 222100209_李炎东
@@ -45,7 +47,7 @@ public class MsgController {
      * @auther: 222100209_李炎东
      * @date: 2019/8/14 16:10
      */
-    @PostMapping("/sendMsg")
+//    @PostMapping("/sendMsg")
     public boolean sendMsg(String msg){
         System.out.println("全体广播消息 ["+msg+"]");
         TextMessage textMessage = new TextMessage(msg);
@@ -58,28 +60,59 @@ public class MsgController {
     }
 
     /**
-     * 功能描述:向指定用户发送消息
+     * @author 222100209_李炎东
+     * @usage 发送系统消息
+     * @param msg 发送的消息
+     * @param toId 发送至
+     * @return
+     */
+    @PostMapping("/sendSysMsg/{toId}")
+    @ApiOperation("发送系统消息")
+    public Result sendSysMsg(@RequestParam String msg,@PathVariable Long toId) {
+        User u = userService.getUserById(toId);
+        if (u==null) {
+            return Result.error(Constants.CODE_400,"不存在该用户");
+        } else {
+            messageService.sendSys(msg,toId);
+            return Result.success(msg);
+        }
+    }
+
+    /**
+     * @author 222100209_李炎东
+     * @usage 获取系统消息
+     * @param id 用户Id
+     * @return
+     */
+    @GetMapping("/getSysMsg/{id}")
+    @ApiOperation("获取系统消息")
+    public Result getSysMeg(@PathVariable Long id) {
+        User u = userService.getUserById(id);
+        if (u==null) {
+            return Result.error(Constants.CODE_400,"不存在该用户");
+        } else {
+            List<Message> msgs = messageService.getSys(id);
+            Integer count = msgs.size();
+            return Result.success(msgs,count.toString());
+        }
+    }
+
+    /**
+     * @auther 222100209_李炎东
+     * @usage 向指定用户发送消息
      * @param msg 消息内容
-     * @auther: 222100209_李炎东
-     * @date: 2019/8/14 16:13
      */
     @PostMapping("/sendMsgByUser/{toId}/{fromId}")
     @ApiOperation("fromId给toId发送消息")
     public Result sendMsgByUser(@RequestParam String msg, @PathVariable Long toId, @PathVariable Long fromId){
-        UserInfoVO user = userDetailsMapper.getUserInfo(toId);
-        Message message = new Message();
-        message.setMsg(msg);
-        message.setTo_id(toId);
-        message.setFrom_id(fromId);
-        messageMapper.insert(message);
-        System.out.println("向 "+user.getNickName()+" 发送消息，消息内容为:"+msg);
-//        TextMessage textMessage = new TextMessage(msg);
-//        try{
-//            WebSocketPushHandler.sendMessageToUser(toId,textMessage);
-//        }catch (Exception e){
-//            return Result.error(Constants.CODE_500,"系统错误");
-//        }
-        return Result.success(message);
+        User u1 = userService.getUserById(fromId);
+        User u2 = userService.getUserById(toId);
+        if (u1==null||u2==null) {
+            return Result.error(Constants.CODE_400,"不存在该用户");
+        } else {
+            messageService.sendMsg(fromId,toId,msg);
+            return Result.success(msg);
+        }
     }
 
     /**

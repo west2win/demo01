@@ -189,7 +189,7 @@ public class GoodService extends ServiceImpl<GoodsMapper, Item> {
     }
 
     /**
-     * @author 222100209
+     * @author 222100209_李炎东
      * @param id 商品Id
      * @return ItemVO
      */

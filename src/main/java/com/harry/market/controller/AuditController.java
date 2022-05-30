@@ -9,6 +9,7 @@ import com.harry.market.entity.User;
 import com.harry.market.mapper.GoodsMapper;
 import com.harry.market.mapper.UserMapper;
 import com.harry.market.service.GoodService;
+import com.harry.market.service.MessageService;
 import com.harry.market.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class AuditController {
     private GoodsMapper goodsMapper;
     @Resource
     private UserMapper userMapper;
+    @Autowired
+    private MessageService messageService;
 
     /**
      * @author 222100209_李炎东
@@ -157,9 +160,12 @@ public class AuditController {
         if (itemById==null) {
             return Result.error(Constants.CODE_400,"商品id错误");
         }
+        Long sellerId = Long.parseLong(itemById.getSellerId());
         if (pass==0) {
+            messageService.sendSys("您的商品 "+itemById.getName()+" 未通过审核，请尝试排查错误后重新提交",sellerId);
             return Result.success(goodsMapper.unpassAudit(id));
         } else if (pass==1) {
+            messageService.sendSys("恭喜您！您的商品 "+itemById.getName()+" 已通过审核！",sellerId);
             return Result.success(goodsMapper.passAudit(id));
         } else {
             return Result.error(Constants.CODE_400,"参数错误");
@@ -210,6 +216,7 @@ public class AuditController {
         if (userService.getUserById(userId)==null) {
             return Result.error(Constants.CODE_400,"该用户不存在或已被删除");
         }
+        messageService.sendSys("很抱歉,您的用户因某种原因已被封禁",userId);
         userService.delUser(userId);
         return Result.success();
     }
